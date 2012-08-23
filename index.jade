@@ -19,8 +19,10 @@ html
       a(href='https://maps.google.com/') Google Maps
     :coffeescript
       directionService = undefined
+      here = undefined
 
       $ ->
+        getLocation()
         directionService = new google.maps.DirectionsService
         $('button').click getTimeToThere
 
@@ -42,9 +44,21 @@ html
 
       buildRequest = (there) ->
         destination : there
-        origin : 'baton rouge, la'
+        origin : "#{here.latitude},#{here.longitude}"
         travelMode : google.maps.TravelMode.DRIVING
 
       buildResultString = (request, seconds) ->
         seconds+' seconds from '+request.origin+' to '+request.destination
 
+      getLocation = ->
+        if navigator.geolocation
+          navigator.geolocation.getCurrentPosition locationSuccess, locationError
+        else
+          here = 'nowhere'
+
+      locationError = (msg) ->
+        console.log msg
+
+      locationSuccess = (position) ->
+        console.log position
+        here = position.coords
