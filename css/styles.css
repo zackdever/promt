@@ -6,6 +6,9 @@ html, body {
   margin: 0;
   padding: 0;
 }
+a {
+  text-decoration: none;
+}
 #container {
   border-top: thick solid black;
   min-height: 100%;
@@ -15,4 +18,33 @@ html, body {
 h1 {
   font-size: 72px;
   letter-spacing: -4px;
+}
+h2 {
+  font-size: 36px;
+  letter-spacing: -2px;
+  float: left;  
+}
+#info {
+  padding-top: 50px;
+  width: 800px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+input, button {
+  height: 50px;
+  border: none;
+  margin-bottom: 50px;
+}
+button {
+  width: 100px;
+  background: black;
+  color: white;
+  margin-left: 10px;
+}
+input {
+  background: #efefef;
+  width: 350px;
+}
+.smallprint {
+  font-size: 10px;
 }
