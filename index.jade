@@ -51,7 +51,12 @@ html
         travelMode : google.maps.TravelMode.DRIVING
 
       buildResultString = (request, seconds) ->
-        seconds+' seconds from '+here.pretty+' to '+request.destination
+        minutes = Math.round(seconds / 60)
+        hours = Math.floor(minutes / 60)
+        minutes -= hours*60
+        time = minutes + ' minutes'
+        if (hours > 0) then time = hours + ' hours and ' + time
+        time + ' to ' + request.destination
 
       getLocation = ->
         if navigator.geolocation
