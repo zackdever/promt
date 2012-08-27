@@ -5,10 +5,10 @@
   $(function() {
     getLocation();
     directionService = new google.maps.DirectionsService();
-    $('button').click(getTimeToThere);
+    $('button').click(getArrivalTime);
   });
 
-  function getTimeToThere() {
+  function getArrivalTime() {
     var there = document.getElementById('there').value;
     getDurationTo(there, function(duration) {
       document.getElementById('result').innerHTML = duration;
@@ -42,12 +42,9 @@
   }
 
   function buildResultString(request, seconds) {
-    var minutes = Math.round(seconds / 60);
-    var hours = Math.floor(minutes / 60);
-    minutes -= hours * 60;
-    var time = minutes + ' minutes';
-    if (hours > 0) time = hours + ' hours and ' + time;
-    return time + ' to ' + request.destination;
+    return moment()
+      .add('seconds', seconds)
+      .format('h:mm a');
   }
 
   function getLocation() {
