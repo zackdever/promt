@@ -6,7 +6,10 @@ html
   head
     title are we there yet
   body
-    h1 define there:
+    h2 we think you're here:
+    p#here
+
+    h2 define there:
     p
       input#there
       button how long
@@ -48,11 +51,11 @@ html
         travelMode : google.maps.TravelMode.DRIVING
 
       buildResultString = (request, seconds) ->
-        seconds+' seconds from '+request.origin+' to '+request.destination
+        seconds+' seconds from '+here.pretty+' to '+request.destination
 
       getLocation = ->
         if navigator.geolocation
-          navigator.geolocation.getCurrentPosition locationSuccess, locationError
+          navigator.geolocation.getCurrentPosition locationSuccess, locationError, {maximumAge:10000}
         else
           here = 'nowhere'
 
@@ -60,5 +63,9 @@ html
         console.log msg
 
       locationSuccess = (position) ->
-        console.log position
         here = position.coords
+        latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
+        geocoder = new google.maps.Geocoder()
+        geocoder.geocode {location:latlng}, (result) ->
+          here.pretty = result[0].formatted_address
+          $('#here').html here.pretty
