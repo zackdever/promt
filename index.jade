@@ -5,12 +5,10 @@ include config
 html
   head
     title are we there yet
-    link(type='text/css',rel='stylesheet', href='./css/styles.css')
+    link(type='text/css',rel='stylesheet', href='/css/styles.css')
   body
     #container
       h1 Just Get Me There.
-      //- h2 we think you're here:
-      //- p#here
       #info
         h2 I want to get to:
         p
@@ -19,64 +17,7 @@ html
         p#result
       p.smallprint powered by&nbsp;
         a(href='https://maps.google.com/') Google Maps
-    
-
 
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js')
     script(src='http://maps.googleapis.com/maps/api/js?key='+config.googleMapsKey+'&sensor=false')
-
-    
-    :coffeescript
-      directionService = undefined
-      here = undefined
-
-      $ ->
-        getLocation()
-        directionService = new google.maps.DirectionsService
-        $('button').click getTimeToThere
-
-      getTimeToThere = ->
-        there = document.getElementById('there').value
-        getDurationTo there, (duration) ->
-          document.getElementById('result').innerHTML = duration
-
-      getDurationTo = (there, callback) ->
-        request = buildRequest there
-        directionService.route request, (result, status) ->
-          if google.maps.DirectionsStatus.OK != status
-            callback 'shucks. something is amiss'
-          else
-            legs = result.routes[0].legs
-            seconds = 0
-            seconds += leg.duration.value for leg in legs
-            callback buildResultString request, seconds
-
-      buildRequest = (there) ->
-        destination : there
-        origin : "#{here.latitude},#{here.longitude}"
-        travelMode : google.maps.TravelMode.DRIVING
-
-      buildResultString = (request, seconds) ->
-        minutes = Math.round(seconds / 60)
-        hours = Math.floor(minutes / 60)
-        minutes -= hours*60
-        time = minutes + ' minutes'
-        if (hours > 0) then time = hours + ' hours and ' + time
-        time + ' to ' + request.destination
-
-      getLocation = ->
-        if navigator.geolocation
-          navigator.geolocation.getCurrentPosition locationSuccess, locationError, {maximumAge:10000}
-        else
-          here = 'nowhere'
-
-      locationError = (msg) ->
-        console.log msg
-
-      locationSuccess = (position) ->
-        here = position.coords
-        latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
-        geocoder = new google.maps.Geocoder()
-        geocoder.geocode {location:latlng}, (result) ->
-          here.pretty = result[0].formatted_address
-          $('#here').html here.pretty
+    script(src='/js/index.js')
