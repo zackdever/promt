@@ -35,24 +35,34 @@ h2 {
   margin: 0 auto;
   overflow: hidden;
 }
+#info h2 {
+  padding-top: 10px;
+}
 input, button {
   border: none;
-  margin-bottom: 50px;
   margin-left: 20px;
   float: left;
   font-size: 16px;
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -1px;
 }
 button {
-  width: 100px;
+  width: 150px;
   background: black;
   color: white;
-  height: 48px;
+  height: 58px;
 }
 input {
   background: #efefef;
   width: 350px;
-  height: 50px;
+  height: 60px;
   padding-left: 25px;
+}
+button.go {
+  width: 200px;
+  float: none;
+  margin: 50px auto;
 }
 #result {
   clear: both;
