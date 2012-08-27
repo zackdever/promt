@@ -31,7 +31,7 @@ h2 {
   /*border-top: thin solid black;*/
   padding-top: 100px;
   width: 800px;
-  height: 300px;
+  height: 500px;
   margin: 0 auto;
   overflow: hidden;
 }
@@ -53,6 +53,9 @@ button {
   color: white;
   height: 58px;
 }
+button:hover {
+  cursor: pointer;
+}
 input {
   background: #efefef;
   width: 350px;
@@ -62,7 +65,13 @@ input {
 button.go {
   width: 200px;
   float: none;
-  margin: 50px auto;
+  margin: 75px auto;
+  background: #efefef;
+  border: thin solid #ccc;
+}
+button #time {
+  display: none;
+  height: 50px;
 }
 #result {
   clear: both;
