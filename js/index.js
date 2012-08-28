@@ -11,8 +11,13 @@
 
   function getArrivalTime() {
     var there = document.getElementById('there').value;
-    getDurationTo(there, function(duration) {
-      $('#arrival-time').text(duration);
+    getDurationTo(there, function(seconds) {
+      var arrival = moment().add('seconds', seconds).format('h:mm a');
+      var duration = moment
+        .duration(seconds, 'seconds').humanize();
+
+      $('#arrival-time').text(arrival);
+      $('#duration').text('(about '+duration+')');
       $('#result').fadeIn();
     });
   }
@@ -30,7 +35,7 @@
           seconds += legs[i].duration.value;
         }
 
-        callback(moment().add('seconds', seconds).format('h:mm a'));
+        callback(seconds);
       }
     });
   }

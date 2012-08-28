@@ -38,6 +38,10 @@ h2 {
 #info h2 {
   padding-top: 10px;
 }
+#duration {
+  font-size: 70%;
+  color: gray;
+}
 input, button {
   border: none;
   margin-left: 20px;
