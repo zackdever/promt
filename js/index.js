@@ -11,7 +11,8 @@
   function getArrivalTime() {
     var there = document.getElementById('there').value;
     getDurationTo(there, function(duration) {
-      document.getElementById('result').innerHTML = duration;
+      $('#arrival-time').text(duration);
+      $('#result').fadeIn();
     });
   }
 
@@ -28,7 +29,7 @@
           seconds += legs[i].duration.value;
         }
 
-        callback(buildResultString(request, seconds));
+        callback(moment().add('seconds', seconds).format('h:mm a'));
       }
     });
   }
@@ -39,12 +40,6 @@
       origin : here.latitude + ',' + here.longitude,
       travelMode : google.maps.TravelMode.DRIVING
     };
-  }
-
-  function buildResultString(request, seconds) {
-    return moment()
-      .add('seconds', seconds)
-      .format('h:mm a');
   }
 
   function getLocation() {

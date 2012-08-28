@@ -15,14 +15,17 @@ html
           input#there
           button.asap asap
             #time
-        button.go GO!
-        p#result
-      p.smallprint powered by&nbsp;
-        a(href='https://maps.google.com/') Google Maps
+        //-button.go GO!
+        #result
+          p
+            | From where you're sat, you'll be there about
+            | <span id='arrival-time'></span>.
+          p.smallprint (though no promise on traffic)
 
 
+      p.smallprint
+        a(href='https://maps.google.com/') powered by Google Maps
 
-      //-From where you're currently sat...
 
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js')
     script(src='http://maps.googleapis.com/maps/api/js?key='+config.googleMapsKey+'&sensor=false')

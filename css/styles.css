@@ -25,13 +25,13 @@ h1 {
 h2 {
   font-size: 36px;
   letter-spacing: -2px;
-  float: left;  
+  float: left;
 }
 #info {
   /*border-top: thin solid black;*/
   padding-top: 100px;
   width: 800px;
-  height: 500px;
+  height: 300px;
   margin: 0 auto;
   overflow: hidden;
 }
@@ -75,9 +75,11 @@ button #time {
 }
 #result {
   clear: both;
+  margin-top: 100px;
   padding: 50px 0;
   font-size: 24px;
   border-top: thin solid #efefef;
+  display: none;
 }
 .smallprint {
   font-size: 10px;
