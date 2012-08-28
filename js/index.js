@@ -1,10 +1,11 @@
 (function() {
 
-  var directionService, here;
+  var here;
+  var directionService = new google.maps.DirectionsService();
+  var geocoder = new google.maps.Geocoder();
 
   $(function() {
-    getLocation();
-    directionService = new google.maps.DirectionsService();
+    setCurrentLocation();
     $('button').click(getArrivalTime);
   });
 
@@ -37,19 +38,18 @@
   function buildRequest(there) {
     return {
       destination : there,
-      origin : here.latitude + ',' + here.longitude,
+      origin : here.coords.latitude + ',' + here.coords.longitude,
       travelMode : google.maps.TravelMode.DRIVING
     };
   }
 
-  function getLocation() {
-    if (navigator.geolocation) {
+  function setCurrentLocation() {
+    if (navigator.geolocation)
       navigator.geolocation.getCurrentPosition(
         locationSuccess, locationError, {maximumAge:10000}
       );
-    } else {
-      console.log('snap');
-    }
+    else
+      console.log('location access denied');
   }
 
   function locationError(msg) {
@@ -57,9 +57,9 @@
   }
 
   function locationSuccess(position) {
-    here = position.coords;
-    var latlng = new google.maps.LatLng(here.latitude, here.longitude);
-    var geocoder = new google.maps.Geocoder();
+    here = position;
+    var latlng = new google.maps.LatLng(
+      here.coords.latitude, here.coords.longitude);
     geocoder.geocode({location:latlng}, function(result) {
       here.pretty = result[0].formatted_address;
     });
