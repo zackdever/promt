@@ -28,10 +28,9 @@ h2 {
   float: left;
 }
 #info {
-  /*border-top: thin solid black;*/
   padding-top: 100px;
-  width: 860px;
-  /*height: 300px;*/
+  width: 990px;
+  height: 300px;
   margin: 0 auto;
   overflow: hidden;
 }
@@ -68,18 +67,16 @@ input {
   text-align: center;
 }
 button.go {
-  width: 200px;
-  float: none;
-  margin: 75px auto;
-  /*background: #efefef;*/
-  /*border: thin solid #ccc;*/
+  width: 100px;
+  float: left;
+  margin-bottom: 50px;
 }
 #when {
   width: 80px;
 }
 #result {
   clear: both;
-  /*margin-top: 100px;*/
+  margin-top: 50px;
   padding: 50px 0;
   font-size: 24px;
   border-top: thin solid #efefef;
