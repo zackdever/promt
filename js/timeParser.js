@@ -1,6 +1,6 @@
 (function() {
   var root = (typeof exports == 'undefined' ? window : exports);
-  var re = /^(10|11|12|[1-9])(?::)?([0-5][0-9])?(p|a)?[^0-9]*$/i;
+  var re = /^(10|11|12|[1-9])(?::)?([0-5][0-9])?$/;
 
   root.isValid = function(time) {
     return re.test(time);
@@ -11,26 +11,25 @@
     var result = re.exec(time);
     if (!result) return null;
 
-    return sanitize(result[1], result[2], result[3]);
+    var minute = result[2] ? parseInt(result[2]) : 0;
+    return { hour: parseInt(result[1]), minute: minute};
   };
 
   root.parseToDate = function(time) {
     var result = root.parse(time);
-    var now = new Date();
+    return toDate(result.hour, result.minute);
+  }
 
-    now.setHours(result.period === 'p' ? result.hour + 12 : result.hour);
-    now.setMinutes(result.minute);
-    return now;
-  };
+  function toDate(hour, minute) {
+    if (hour === 12) hour = 0; // this lets us uniformly handle am/pm adjustments
 
-  function sanitize(hour, minute, period) {
-    var minute = minute ? minute : '00';
-    // TODO this is incorrect, though I'd like to get this to Phil so I'm going to commit.
-    var period = period ? period : new Date().getHours() > 11 ? 'p' : 'a';
-    return {
-      hour : parseInt(hour),
-      minute : parseInt(minute),
-      period : period
-    };
+    var d = new Date();
+    d.setMinutes(minute);
+    d.setHours(d.getHours() + hour);
+
+    // if it has already passed, add 12 hours at a time until it's in the future
+    while (new Date() > d) d.setHours(d.getHours() + 12);
+
+    return d;
   }
 })();
