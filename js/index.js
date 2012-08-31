@@ -23,12 +23,12 @@
         result += 'need to leave around ' + departure;
       } else {
         var arrival = moment().add('seconds', seconds).format('h:mm a');
-        //duration = moment.duration(seconds, 'seconds').humanize();
+        duration = moment.duration(seconds, 'seconds').humanize();
+        $('#duration').text('(about '+duration+')');
         result += 'get there around ' + arrival;
       }
 
       $('#time').text(result);
-      //$('#duration').text('(about '+duration+')');
       $('#result').fadeIn();
     });
   }
