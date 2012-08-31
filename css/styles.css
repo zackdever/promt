@@ -59,8 +59,12 @@ button {
 button:hover {
   cursor: pointer;
 }
-.bold {
-  background: red;
+#inputwrap {
+  float: left;
+}
+#inputwrap h5 {
+  font-weight: 400;
+  color: #bbb;
 }
 input {
   background: #efefef;
@@ -68,6 +72,9 @@ input {
   height: 60px;
   padding: 0 20px;
   text-align: center;
+}
+input#when {
+  margin-bottom: 10px;
 }
 button.go {
   width: 100px;
@@ -100,3 +107,8 @@ button.go {
   clear: both;
   text-align: center;
 }
+
+.bold {
+  font-weight: 700;
+}
+
