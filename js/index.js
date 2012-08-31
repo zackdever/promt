@@ -20,7 +20,7 @@
       if (when) {
         var arrival = parseToDate(when);
         var departure = moment(arrival).subtract('seconds', seconds).format('h:mm a');
-        result += 'need to leave around ' + departure;
+        result += 'need to leave around <span class="bold">' + departure + '</span>';
       } else {
         var arrival = moment().add('seconds', seconds).format('h:mm a');
         duration = moment.duration(seconds, 'seconds').humanize();
@@ -28,7 +28,7 @@
         result += 'get there around ' + arrival;
       }
 
-      $('#time').text(result);
+      $('#time').html(result);
       $('#result').fadeIn();
     });
   }

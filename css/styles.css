@@ -59,6 +59,9 @@ button {
 button:hover {
   cursor: pointer;
 }
+.bold {
+  background: red;
+}
 input {
   background: #efefef;
   width: 350px;
