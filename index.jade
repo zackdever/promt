@@ -11,20 +11,17 @@ html
       h1 Just Get Me There.
       #info
         h2 I want to get to
-        p
-          input(autofocus)#there
-          button.asap asap
-            #time
-        //-button.go GO!
+        input(autofocus)#there
+        h2 by
+        input#when
+        button.go GO!
         #result
           p
-            | From where you're sat, you'll be there about&nbsp;
-            span#arrival-time
+            span#time
             &nbsp;
             span#duration
           br
           p.smallprint (though no promise on traffic)
-
 
       p.smallprint
         a(href='https://maps.google.com/') powered by Google Maps
@@ -33,4 +30,5 @@ html
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js')
     script(src='http://maps.googleapis.com/maps/api/js?key='+config.googleMapsKey+'&sensor=false')
     script(src='/js/moment.min.js')
+    script(src='/js/timeParser.js')
     script(src='/js/index.js')

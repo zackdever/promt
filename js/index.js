@@ -6,18 +6,29 @@
 
   $(function() {
     setCurrentLocation();
-    $('button').click(getArrivalTime);
+    $('button').click(calculateTimes);
   });
 
-  function getArrivalTime() {
+  function calculateTimes() {
     var there = document.getElementById('there').value;
-    getDurationTo(there, function(seconds) {
-      var arrival = moment().add('seconds', seconds).format('h:mm a');
-      var duration = moment
-        .duration(seconds, 'seconds').humanize();
+    var when = document.getElementById('when').value;
 
-      $('#arrival-time').text(arrival);
-      $('#duration').text('(about '+duration+')');
+    getDurationTo(there, function(seconds) {
+      var duration;
+      var result = "From where you're sat, you'll ";
+
+      if (when) {
+        var arrival = parseToDate(when);
+        var departure = moment(arrival).subtract('seconds', seconds).format('h:mm a');
+        result += 'need to leave around ' + departure;
+      } else {
+        var arrival = moment().add('seconds', seconds).format('h:mm a');
+        //duration = moment.duration(seconds, 'seconds').humanize();
+        result += 'get there around ' + arrival;
+      }
+
+      $('#time').text(result);
+      //$('#duration').text('(about '+duration+')');
       $('#result').fadeIn();
     });
   }
@@ -69,4 +80,4 @@
       here.pretty = result[0].formatted_address;
     });
   }
-  })();
+})();

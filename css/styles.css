@@ -30,8 +30,8 @@ h2 {
 #info {
   /*border-top: thin solid black;*/
   padding-top: 100px;
-  width: 800px;
-  height: 300px;
+  width: 860px;
+  /*height: 300px;*/
   margin: 0 auto;
   overflow: hidden;
 }
@@ -44,7 +44,7 @@ h2 {
 }
 input, button {
   border: none;
-  margin-left: 20px;
+  margin: 0 20px;
   float: left;
   font-size: 16px;
   font-size: 32px;
@@ -64,22 +64,22 @@ input {
   background: #efefef;
   width: 350px;
   height: 60px;
-  padding-left: 25px;
+  padding: 0 20px;
+  text-align: center;
 }
 button.go {
   width: 200px;
   float: none;
   margin: 75px auto;
-  background: #efefef;
-  border: thin solid #ccc;
+  /*background: #efefef;*/
+  /*border: thin solid #ccc;*/
 }
-button #time {
-  display: none;
-  height: 50px;
+#when {
+  width: 80px;
 }
 #result {
   clear: both;
-  margin-top: 100px;
+  /*margin-top: 100px;*/
   padding: 50px 0;
   font-size: 24px;
   border-top: thin solid #efefef;
