@@ -85,4 +85,15 @@ button.go {
 .smallprint {
   font-size: 10px;
   clear: both;
+  text-align: center;
+}
+.smallprintgoogle {
+  width: 120px;
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  margin-left: -60px;
+  font-size: 10px;
+  clear: both;
+  text-align: center;
 }
