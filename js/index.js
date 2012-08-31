@@ -15,7 +15,7 @@
 
     getDurationTo(there, function(seconds) {
       var duration;
-      var result = "From where you're sat, you'll ";
+      var result = 'From where ' + '<span class="location">you&apos;re sat</span>' + ', you&apos;ll ';
 
       if (when) {
         var arrival = parseToDate(when);
@@ -25,7 +25,7 @@
         var arrival = moment().add('seconds', seconds).format('h:mm a');
         duration = moment.duration(seconds, 'seconds').humanize();
         $('#duration').text('(about '+duration+')');
-        result += 'get there around ' + arrival;
+        result += 'get there around <span class="bold">' + arrival + '</span>';
       }
 
       $('#time').html(result);

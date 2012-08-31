@@ -17,10 +17,16 @@ a {
   text-align: center;
   padding-top: 50px;
 }
+img {
+  vertical-align: middle;
+  padding-bottom: 60px;
+  padding-right: 25px;
+}
 h1 {
+  margin-top: 50px;
   font-size: 72px;
   letter-spacing: -4px;
-  padding-bottom: 10px;
+  display: inline;
 }
 h2 {
   font-size: 36px;
@@ -28,7 +34,7 @@ h2 {
   float: left;
 }
 #info {
-  padding-top: 100px;
+  padding-top: 10px;
   width: 990px;
   height: 300px;
   margin: 0 auto;
@@ -91,6 +97,7 @@ button.go {
   font-size: 24px;
   border-top: thin solid #efefef;
   display: none;
+  color: #333;
 }
 .smallprint {
   font-size: 10px;
@@ -108,7 +115,8 @@ button.go {
   text-align: center;
 }
 
-.bold {
+.bold, .location {
   font-weight: 700;
+  color: black;
 }
 
