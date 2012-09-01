@@ -79,15 +79,16 @@
 
   function locationSuccess(position) {
     here = position;
-    var latlng = new google.maps.LatLng(
-      here.coords.latitude, here.coords.longitude);
+    var latlng = new google.maps.LatLng(here.coords.latitude, here.coords.longitude);
     geocoder.geocode({location:latlng}, function(results, status) {
-
+      var bounds;
       for(var i=0; i<results.length; i++) {
         if (results[i].types.indexOf('locality') !== -1) {
-          autoComplete.setBounds(results[i].geometry.bounds);
+          bounds = results[i].geometry.bounds;
         }
       }
+
+      if (bounds != null) autoComplete.setBounds(bounds);
       here.pretty = results[0].formatted_address;
     });
   }
