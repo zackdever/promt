@@ -25,7 +25,7 @@
 
     var d = new Date();
     d.setMinutes(minute);
-    d.setHours(d.getHours() + hour);
+    d.setHours(hour);
 
     // if it has already passed, add 12 hours at a time until it's in the future
     while (new Date() > d) d.setHours(d.getHours() + 12);

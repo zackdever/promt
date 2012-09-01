@@ -3,10 +3,15 @@
   var here;
   var directionService = new google.maps.DirectionsService();
   var geocoder = new google.maps.Geocoder();
+  var autoOptions = {
+    //types: ['establishment']
+  };
+  var autoComplete;
 
   $(function() {
     setCurrentLocation();
     $('button').click(calculateTimes);
+    autoComplete = new google.maps.places.Autocomplete(document.getElementById('there'), autoOptions);
   });
 
   function calculateTimes() {
@@ -76,8 +81,14 @@
     here = position;
     var latlng = new google.maps.LatLng(
       here.coords.latitude, here.coords.longitude);
-    geocoder.geocode({location:latlng}, function(result) {
-      here.pretty = result[0].formatted_address;
+    geocoder.geocode({location:latlng}, function(results, status) {
+
+      for(var i=0; i<results.length; i++) {
+        if (results[i].types.indexOf('locality') !== -1) {
+          autoComplete.setBounds(results[i].geometry.bounds);
+        }
+      }
+      here.pretty = results[0].formatted_address;
     });
   }
 })();

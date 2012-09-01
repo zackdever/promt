@@ -56,6 +56,12 @@ input, button {
   font-weight: 600;
   letter-spacing: -1px;
 }
+.pac-item {
+  margin: 0 20px;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -1px;
+}
 button {
   width: 150px;
   background: black;
@@ -77,7 +83,6 @@ input {
   width: 350px;
   height: 60px;
   padding: 0 20px;
-  text-align: center;
 }
 input#when {
   margin-bottom: 10px;
