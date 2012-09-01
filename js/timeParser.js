@@ -1,6 +1,6 @@
 (function() {
   var root = (typeof exports == 'undefined' ? window : exports);
-  var re = /^(10|11|12|[1-9])(?::)?([0-5][0-9])?$/;
+  var re = /^(10|11|12|[1-9])(?::|\.)?([0-5][0-9])?$/;
 
   root.isValid = function(time) {
     return re.test(time);
