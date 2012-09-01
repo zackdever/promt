@@ -19,7 +19,7 @@
     var when = document.getElementById('when').value;
 
     getDurationTo(there, function(seconds) {
-      var duration;
+      var duration = '';
       var result = 'From where ' + '<span class="location">you&apos;re sat</span>' + ', you&apos;ll ';
 
       if (when) {
@@ -28,11 +28,12 @@
         result += 'need to leave around <span class="bold">' + departure + '</span>';
       } else {
         var arrival = moment().add('seconds', seconds).format('h:mm a');
-        duration = moment.duration(seconds, 'seconds').humanize();
-        $('#duration').text('(about '+duration+')');
+        var durationSeconds = moment.duration(seconds, 'seconds').humanize();
+        duration = '(about ' + durationSeconds + ')';
         result += 'get there around <span class="bold">' + arrival + '</span>';
       }
 
+      $('#duration').text(duration);
       $('#time').html(result);
       $('#result').fadeIn();
     });
