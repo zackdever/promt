@@ -23,7 +23,7 @@
       var result = 'From where ' + '<span class="location">you&apos;re sat</span>' + ', you&apos;ll ';
 
       if (when) {
-        var arrival = parseToDate(when);
+        var arrival = Time.parseToDate(when);
         var departure = moment(arrival).subtract('seconds', seconds).format('h:mm a');
         result += 'need to leave around <span class="bold">' + departure + '</span>';
       } else {
