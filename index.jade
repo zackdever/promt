@@ -4,16 +4,19 @@ include config
 
 html
   head
-    title are we there yet
+    title promt
     link(type='text/css',rel='stylesheet', href='/css/styles.css')
   body
     #container
-      img(src="images/pocketwatch.png", width='85', height='100')
-      h1 Just Get Me There.
+      header
+        h1
+          img(src="images/pocketwatch.png", width='85', height='100')
+          | Promt.
+        h2 <span>un</span>fashionably on time
       #info
-        h2 I want to get to
+        h3 I want to get to
         input(autofocus)#there
-        h2 by
+        h3 by
         #inputwrap
           input#when(placeholder='asap')
           h5 ex: "asap" or "7.45"
