@@ -40,11 +40,9 @@ h2 span {
 h3 {
   font-size: 36px;
   letter-spacing: -2px;
-  float: left;
 }
 #info {
   padding-top: 10px;
-  width: 990px;
   height: 300px;
   margin: 0 auto;
   overflow: hidden;
@@ -58,13 +56,12 @@ h3 {
 }
 input, button {
   border: none;
-  margin: 0 20px;
-  float: left;
   font-size: 16px;
   font-size: 32px;
   font-weight: 600;
   letter-spacing: -1px;
 }
+/* a single google autofill result */
 .pac-item {
   margin: 0 20px;
   font-size: 20px;
@@ -81,11 +78,18 @@ button:hover {
   cursor: pointer;
 }
 #inputwrap {
-  float: left;
+  position: relative;
+  margin: 0 20px;
 }
-#inputwrap h5 {
+#inputwrap .example {
   font-weight: 400;
   color: #bbb;
+  font-size: 12px;
+  letter-spacing: 0px;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: -30px;
 }
 input {
   background: #efefef;
@@ -93,13 +97,13 @@ input {
   height: 60px;
   padding: 0 20px;
 }
-input#when {
-  margin-bottom: 10px;
+input#there {
+  margin: 0 20px;
 }
 button.go {
   width: 100px;
-  float: left;
-  margin-bottom: 50px;
+  height: 60px;
+  margin-left: 0;
 }
 #when {
   width: 80px;
@@ -128,7 +132,6 @@ button.go {
   clear: both;
   text-align: center;
 }
-
 .bold, .location {
   font-weight: 700;
   color: black;

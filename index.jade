@@ -14,13 +14,14 @@ html
           | Promt.
         h2 <span>un</span>fashionably on time
       #info
-        h3 I want to get to
-        input(autofocus)#there
-        h3 by
-        #inputwrap
-          input#when(placeholder='asap')
-          h5 ex: "asap" or "7.45"
-        button.go GO!
+        h3
+          | Arrive at
+          input(autofocus)#there
+          | by
+          span#inputwrap
+            input(placeholder='asap')#when
+            span.example ex: "asap" or "7.45"
+          button.go GO!
         #result
           p
             span#time
