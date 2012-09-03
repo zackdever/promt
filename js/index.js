@@ -30,6 +30,7 @@
     setCurrentLocation();
     $('button').click(calculateTimes);
     autoComplete = new google.maps.places.Autocomplete(thereEl, autoCompleteOptions);
+    directionsDisplay = new google.maps.DirectionsRenderer();
   });
 
   function calculateTimes() {
@@ -70,7 +71,7 @@
           seconds += legs[i].duration.value;
         }
 
-        //directionsDisplay.setDirections(result);
+        directionsDisplay.setDirections(result);
         callback(seconds);
       }
     });
@@ -112,6 +113,7 @@
 
       mapOptions.center = latlng;
       var map = new google.maps.Map(mapEl, mapOptions);
+      directionsDisplay.setMap(map);
       var marker = new google.maps.Marker({
         position: latlng,
         animation: google.maps.Animation.DROP,
