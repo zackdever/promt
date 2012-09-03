@@ -14,14 +14,15 @@ html
           | Promt.
         h2 <span>un</span>fashionably on time
       #info
-        h3
-          | Arrive at
-          input(autofocus)#there
-          | by
-          span#inputwrap
-            input(placeholder='asap')#when
-            span.example ex: "asap" or "7.45"
-          button(disabled=true).go GO!
+        a(name='no-fluff')
+          h3
+            | Arrive at
+            input(autofocus)#there
+            | by
+            span#inputwrap
+              input(placeholder='asap')#when
+              span.example ex: "asap" or "7.45"
+            button(disabled=true).go GO!
 
         #result
           p

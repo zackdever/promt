@@ -62,8 +62,14 @@
 
       $('#duration').text(duration);
       $('#time').html(result);
-      $('#result').fadeIn();
+      $('#result').slideDown();
+      scrollToAnchor('no-fluff');
     });
+  }
+
+  function scrollToAnchor(aid){
+    var aTag = $("a[name='"+ aid +"']");
+    $('html,body').animate({scrollTop: aTag.offset().top},'slow');
   }
 
   function getDurationToThere(callback) {
