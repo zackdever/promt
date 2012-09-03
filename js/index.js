@@ -1,13 +1,13 @@
 (function() {
 
-  var autoComplete, directionsDisplay, here, map, mapEl, thereEl, whenEl;
+  var autoComplete, directionsDisplay, here, map, mapEl, there, thereEl, whenEl;
   var directionsService = new google.maps.DirectionsService();
   var geocoder = new google.maps.Geocoder();
   var autoCompleteOptions = { /*types: ['establishment']*/ };
 
   // google maps styling credit: http://www.wherethefuckshouldigotoeat.com/
   // declare b&w google maps
-  var lowSat = [{featureType: "all",stylers: [{ saturation: -100 }]}];
+  var lowSat = [{featureType: 'all', stylers: [{ saturation: -100 }]}];
   // set map options
   var mapOptions = {
     zoom: 16,
@@ -28,16 +28,24 @@
     whenEl  = document.getElementById('when');
 
     setCurrentLocation();
+    bindAutoSelectOnEnterOrTab(thereEl);
     $('button').click(calculateTimes);
     autoComplete = new google.maps.places.Autocomplete(thereEl, autoCompleteOptions);
     directionsDisplay = new google.maps.DirectionsRenderer();
+    google.maps.event.addListener(autoComplete, 'place_changed', onThereChanged);
+    $('#there').focusout(function() { $('.go').prop('disabled', this.value.length == 0); });
   });
 
+
+  function onThereChanged() {
+    there = autoComplete.getPlace();
+    $('.go').prop('disabled', false);
+  }
+
   function calculateTimes() {
-    var there = thereEl.value;
     var when = whenEl.value;
 
-    getDurationTo(there, function(seconds) {
+    getDurationToThere(function(seconds) {
       var duration = '';
       var result = 'From where ' + '<span class="location">you&apos;re sat</span>' + ', you&apos;ll ';
 
@@ -58,7 +66,7 @@
     });
   }
 
-  function getDurationTo(there, callback) {
+  function getDurationToThere(callback) {
     var request = buildRequest(there);
     directionsService.route(request, function(result, status) {
       if (google.maps.DirectionsStatus.OK !== status) {
@@ -79,7 +87,7 @@
 
   function buildRequest(there) {
     return {
-      destination : there,
+      destination : there.geometry.location,
       origin : here.coords.latitude + ',' + here.coords.longitude,
       travelMode : google.maps.TravelMode.DRIVING
     };
@@ -124,5 +132,30 @@
 
       here.pretty = results[0].formatted_address;
     });
+  }
+
+  // credit: http://stackoverflow.com/a/11703018/962091
+  function bindAutoSelectOnEnterOrTab(input) {
+    // store the original event binding function
+    var _addEventListener = (input.addEventListener) ? input.addEventListener : input.attachEvent;
+
+    function addEventListenerWrapper(type, listener) {
+      // Simulate a 'down arrow' keypress on hitting 'return' or 'tab'
+      // when no pac suggestion is selected, and then trigger the original listener.
+      if (type == 'keydown') {
+        var orig_listener = listener;
+        listener = function(event) {
+          var suggestion_selected = $('.pac-item.pac-selected').length > 0;
+          if ((event.which == 13 || event.which == 9) && !suggestion_selected) {
+            var simulated_downarrow = $.Event('keydown', { keyCode: 40, which: 40 });
+            orig_listener.apply(input, [simulated_downarrow]);
+          }
+          orig_listener.apply(input, [event]);
+        };
+      }
+      _addEventListener.apply(input, [type, listener]);
+    }
+    input.addEventListener = addEventListenerWrapper;
+    input.attachEvent = addEventListenerWrapper;
   }
 })();

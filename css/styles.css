@@ -105,6 +105,10 @@ button.go {
   height: 60px;
   margin-left: 0;
 }
+button.go:disabled {
+  background: gray;
+  cursor: default;
+}
 #when {
   width: 80px;
 }
