@@ -6,7 +6,23 @@
   var autoOptions = {
     //types: ['establishment']
   };
-  var autoComplete;
+  var autoComplete, map;
+  // google maps styling credit: http://www.wherethefuckshouldigotoeat.com/
+  //declare b&w google maps
+  var lowSat = [{featureType: "all",stylers: [{ saturation: -100 }]}];
+  //set map options
+  var myOptions = {
+    zoom: 16,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    styles: lowSat,
+    mapTypeControl: false,
+    panControl: false,
+    zoomControl: false,
+    mapTypeControl: false,
+    scaleControl: false,
+    streetViewControl: false,
+    overviewMapControl: false
+  };
 
   $(function() {
     setCurrentLocation();
@@ -90,6 +106,15 @@
       }
 
       if (bounds != null) autoComplete.setBounds(bounds);
+
+      myOptions.center = latlng;
+      var map = new google.maps.Map(document.getElementById('map'), myOptions);
+      var marker = new google.maps.Marker({
+        position: latlng,
+        map: map,
+        title:'You are here!'
+      });
+
       here.pretty = results[0].formatted_address;
     });
   }

@@ -43,7 +43,7 @@ h3 {
 }
 #info {
   padding-top: 10px;
-  height: 300px;
+  /*height: 300px;*/
   margin: 0 auto;
   overflow: hidden;
 }
@@ -111,7 +111,7 @@ button.go {
 #result {
   clear: both;
   margin-top: 50px;
-  padding: 50px 0;
+  padding-top: 50px;
   font-size: 24px;
   border-top: thin solid #efefef;
   display: none;
@@ -135,5 +135,10 @@ button.go {
 .bold, .location {
   font-weight: 700;
   color: black;
+}
+#map {
+  height: 400px;
+  width: 860px;
+  margin: 40px auto;
 }
 
