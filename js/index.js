@@ -1,17 +1,15 @@
 (function() {
 
-  var here;
-  var directionService = new google.maps.DirectionsService();
+  var autoComplete, directionsDisplay, here, map, mapEl, thereEl, whenEl;
+  var directionsService = new google.maps.DirectionsService();
   var geocoder = new google.maps.Geocoder();
-  var autoOptions = {
-    //types: ['establishment']
-  };
-  var autoComplete, map;
+  var autoCompleteOptions = { /*types: ['establishment']*/ };
+
   // google maps styling credit: http://www.wherethefuckshouldigotoeat.com/
-  //declare b&w google maps
+  // declare b&w google maps
   var lowSat = [{featureType: "all",stylers: [{ saturation: -100 }]}];
-  //set map options
-  var myOptions = {
+  // set map options
+  var mapOptions = {
     zoom: 16,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     styles: lowSat,
@@ -25,14 +23,18 @@
   };
 
   $(function() {
+    thereEl = document.getElementById('there');
+    mapEl   = document.getElementById('map');
+    whenEl  = document.getElementById('when');
+
     setCurrentLocation();
     $('button').click(calculateTimes);
-    autoComplete = new google.maps.places.Autocomplete(document.getElementById('there'), autoOptions);
+    autoComplete = new google.maps.places.Autocomplete(thereEl, autoCompleteOptions);
   });
 
   function calculateTimes() {
-    var there = document.getElementById('there').value;
-    var when = document.getElementById('when').value;
+    var there = thereEl.value;
+    var when = whenEl.value;
 
     getDurationTo(there, function(seconds) {
       var duration = '';
@@ -57,7 +59,7 @@
 
   function getDurationTo(there, callback) {
     var request = buildRequest(there);
-    directionService.route(request, function(result, status) {
+    directionsService.route(request, function(result, status) {
       if (google.maps.DirectionsStatus.OK !== status) {
         callback('shucks. something is amiss');
       } else {
@@ -68,6 +70,7 @@
           seconds += legs[i].duration.value;
         }
 
+        //directionsDisplay.setDirections(result);
         callback(seconds);
       }
     });
@@ -107,8 +110,8 @@
 
       if (bounds != null) autoComplete.setBounds(bounds);
 
-      myOptions.center = latlng;
-      var map = new google.maps.Map(document.getElementById('map'), myOptions);
+      mapOptions.center = latlng;
+      var map = new google.maps.Map(mapEl, mapOptions);
       var marker = new google.maps.Marker({
         position: latlng,
         animation: google.maps.Animation.DROP,
