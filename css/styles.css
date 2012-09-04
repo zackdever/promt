@@ -68,6 +68,12 @@ input, button {
   font-weight: 600;
   letter-spacing: -1px;
 }
+.pac-container {
+  background: red;
+}
+.pac-item:first-of-type {
+  background: #eee;
+}
 button {
   width: 150px;
   background: black;
