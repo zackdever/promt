@@ -121,9 +121,10 @@ button.go:disabled {
 #result {
   clear: both;
   margin-top: 50px;
-  padding-top: 50px;
+  padding: 50px 0;
   font-size: 24px;
   border-top: thin solid #efefef;
+  border-bottom: thin solid #efefef;
   display: none;
   color: #333;
 }
@@ -147,6 +148,8 @@ button.go:disabled {
   color: black;
 }
 #map {
+  border-top: thick solid black;
+  border-bottom: thick solid black;
   height: 400px;
   width: 860px;
   margin: 40px auto;
