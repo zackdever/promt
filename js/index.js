@@ -1,14 +1,14 @@
 (function() {
 
-  var autoComplete, directionsDisplay, here, map, mapEl, there, thereEl, whenEl;
+  var autoComplete, here, map, mapEl, there, thereEl, whenEl;
   var directionsService = new google.maps.DirectionsService();
+  var directionsDisplay = new google.maps.DirectionsRenderer();
   var geocoder = new google.maps.Geocoder();
   var autoCompleteOptions = { /*types: ['establishment']*/ };
+  var geoOptions = {maximumAge: 10000};
 
-  // google maps styling credit: http://www.wherethefuckshouldigotoeat.com/
-  // declare b&w google maps
+  // b&w google maps styling credit: http://www.wherethefuckshouldigotoeat.com
   var lowSat = [{featureType: 'all', stylers: [{ saturation: -100 }]}];
-  // set map options
   var mapOptions = {
     zoom: 16,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -16,24 +16,29 @@
     mapTypeControl: false,
     panControl: false,
     zoomControl: false,
-    mapTypeControl: false,
     scaleControl: false,
     streetViewControl: false,
     overviewMapControl: false
   };
 
+
+  // kick things off
   $(function() {
     thereEl = document.getElementById('there');
     mapEl   = document.getElementById('map');
     whenEl  = document.getElementById('when');
 
-    setCurrentLocation();
-    bindAutoSelectOnEnterOrTab(thereEl);
-    $('button').click(calculateTimes);
-    autoComplete = new google.maps.places.Autocomplete(thereEl, autoCompleteOptions);
-    directionsDisplay = new google.maps.DirectionsRenderer();
-    google.maps.event.addListener(autoComplete, 'place_changed', onThereChanged);
-    $('#there').focusout(function() { $('.go').prop('disabled', this.value.length == 0); });
+    setCurrentLocation(function(success) {
+      if (success) {
+        bindAutoSelectOnEnterOrTab(thereEl);
+        $('button').click(calculateTimes);
+        autoComplete = new google.maps.places.Autocomplete(thereEl, autoCompleteOptions);
+        google.maps.event.addListener(autoComplete, 'place_changed', onThereChanged);
+        $('#there').focusout(function() { $('.go').prop('disabled', this.value.length == 0); });
+      } else {
+        log('current location was not set');
+      }
+    });
   });
 
 
@@ -99,45 +104,71 @@
     };
   }
 
-  function setCurrentLocation() {
-    if (navigator.geolocation)
-      navigator.geolocation.getCurrentPosition(
-        locationSuccess, locationError, {maximumAge:10000}
-      );
-    else
-      console.log('location access denied');
+  function setCurrentLocation(callback) {
+    if (navigator.geolocation) {
+      setGeoLocation(callback);
+    } else {
+      log('geo location not supported');
+      callback(false);
+    }
   }
 
-  function locationError(msg) {
-    console.log(msg);
-  }
+  function setGeoLocation(callback) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      here = position;
+      var latlng = new google.maps.LatLng(here.coords.latitude, here.coords.longitude);
+      geocoder.geocode({location: latlng}, function(results, status) {
+        if (status != google.maps.GeocoderStatus.OK) {
+          log(status);
+          callback(false);
+        } else {
+          setAutoCompleteBounds(results);
 
-  function locationSuccess(position) {
-    here = position;
-    var latlng = new google.maps.LatLng(here.coords.latitude, here.coords.longitude);
-    geocoder.geocode({location:latlng}, function(results, status) {
-      var bounds;
-      for(var i=0; i<results.length; i++) {
-        if (results[i].types.indexOf('locality') !== -1) {
-          bounds = results[i].geometry.bounds;
+          // build the map
+          mapOptions.center = latlng;
+          var map = new google.maps.Map(mapEl, mapOptions);
+
+          // show the map
+          directionsDisplay.setMap(map);
+
+          // place a marker on the current location
+          var marker = new google.maps.Marker({
+            position: latlng,
+            animation: google.maps.Animation.DROP,
+            //icon:'/images/you-are-here.png',
+            map: map,
+            title:'You are here!'
+          });
+
+          here.pretty = results[0].formatted_address;
+          callback(true);
         }
-      }
-
-      if (bounds != null) autoComplete.setBounds(bounds);
-
-      mapOptions.center = latlng;
-      var map = new google.maps.Map(mapEl, mapOptions);
-      directionsDisplay.setMap(map);
-      var marker = new google.maps.Marker({
-        position: latlng,
-        animation: google.maps.Animation.DROP,
-        //icon:'/images/you-are-here.png',
-        map: map,
-        title:'You are here!'
       });
+    }, function(error) {
+      log('navigator.geolocation.getCurrentPosition failed: ' + error);
+      callback(false);
+    }, geoOptions);
+  };
 
-      here.pretty = results[0].formatted_address;
-    });
+  // sets the bounds on the auto complete box.
+  // this gives preferences to places inside the bounds.
+  //
+  // results: google maps geocoder.geocode results
+  // type: the result type to use as a bound e.g. 'locality', 'country'
+  function setAutoCompleteBounds(results, type) {
+    var bounds;
+
+    for(var i = 0; i < results.length; i++) {
+      if (results[i].types.indexOf(type) !== -1) {
+        bounds = results[i].geometry.bounds;
+      }
+    }
+
+    if (bounds != null) autoComplete.setBounds(bounds);
+  }
+
+  function log(message) {
+    console.log(message);
   }
 
   // credit: http://stackoverflow.com/a/11703018/962091
