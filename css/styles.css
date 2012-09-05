@@ -64,14 +64,20 @@ input, button {
 .pac-item {
   margin: 0 20px;
   font-size: 20px;
-  font-weight: 600;
-  letter-spacing: -1px;
+  /*font-weight: 600;*/
+  /*letter-spacing: -1px;*/
 }
 .pac-container {
-  background: red;
+  padding-top: 10px;
 }
 .pac-item:first-of-type {
   background: #eee;
+}
+.pac-item {
+  font-size: 14px;
+  font-weight: 100;
+  padding: 10px 0;
+  color: #444;
 }
 button {
   width: 150px;
