@@ -76,19 +76,17 @@ input, button {
 .pac-item {
   margin: 0 20px;
   font-size: 20px;
-  /*font-weight: 600;*/
-  /*letter-spacing: -1px;*/
 }
 .pac-container {
   padding-top: 10px;
 }
-.pac-item:first-of-type {
+/*.pac-item:first-of-type {
   background: #eee;
-}
+}*/
 .pac-item {
   font-size: 14px;
   font-weight: 100;
-  padding: 10px 0;
+  padding: 10px 5px;
   color: #444;
 }
 button {
@@ -119,6 +117,7 @@ input {
   width: 350px;
   height: 60px;
   padding: 0 20px;
+  font-weight: 300;
 }
 input#there {
   margin: 0 20px;
@@ -132,14 +131,18 @@ button.go {
 button.go:disabled {
   background: #efefef;
   cursor: default;
+  color: #aaa;
 }
 #when {
   width: 80px;
 }
+/*#resultWrap {
+  height: 50px;
+}*/
 #result {
   clear: both;
   margin-top: 50px;
-  padding: 50px 0;
+  padding: 25px 0;
   font-size: 24px;
   border-top: thin solid #efefef;
   border-bottom: thin solid #efefef;
@@ -168,6 +171,8 @@ button.go:disabled {
 #map {
   border-top: thick solid #3399cc;
   border-bottom: thick solid #3399cc;
+  border-left: thin solid #3399cc;
+  border-right: thin solid #3399cc;
   height: 400px;
   width: 860px;
   margin: 40px auto;
