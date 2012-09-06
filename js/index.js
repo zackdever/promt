@@ -8,7 +8,8 @@
   var geoOptions = {maximumAge: 10000};
 
   // b&w google maps styling credit: http://www.wherethefuckshouldigotoeat.com
-  var lowSat = [{featureType: 'all', stylers: [{ saturation: -100 }]}];
+  var lowSat = [{featureType: 'all', 
+    stylers: [{saturation: -100 }]}];
   var mapOptions = {
     zoom: 16,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -20,7 +21,6 @@
     streetViewControl: false,
     overviewMapControl: false
   };
-
 
   // kick things off
   $(function() {
