@@ -32,7 +32,6 @@
       if (success) {
         bindAutoSelectOnEnterOrTab(thereEl);
         $('button').click(calculateTimes);
-        autoComplete = new google.maps.places.Autocomplete(thereEl, autoCompleteOptions);
         google.maps.event.addListener(autoComplete, 'place_changed', onThereChanged);
         $('#there').focusout(function() { $('.go').prop('disabled', this.value.length == 0); });
       } else {
@@ -122,13 +121,15 @@
           log(status);
           callback(false);
         } else {
-          setAutoCompleteBounds(results);
+          autoComplete = new google.maps.places.Autocomplete(thereEl, autoCompleteOptions);
+          setAutoCompleteBounds(results, 'locality');
 
           // build the map
           mapOptions.center = latlng;
           var map = new google.maps.Map(mapEl, mapOptions);
 
           // show the map
+          directionsDisplay.suppressMarkers = true;
           directionsDisplay.setMap(map);
 
           // place a marker on the current location
@@ -164,6 +165,7 @@
       }
     }
 
+    console.log(bounds);
     if (bounds != null) autoComplete.setBounds(bounds);
   }
 
