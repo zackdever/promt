@@ -24,7 +24,7 @@ header {
   margin: 0 auto;
 }
 img {
-/*padding-right: 25px;*/
+/*padding-right  25px */
   float: left;
   padding-top: 15px;
 }
@@ -32,21 +32,21 @@ hgroup {
   text-align: left;
   float: left;
 }
-h1 {
+hgroup h1 {
   font-size: 100px;
   letter-spacing: -4px;
   font-weight: 800;
   font-family: "proxima-nova", helvetica, arial, sans-serif;
   color: #333;
 }
-h2 {
+hgroup h2 {
   font-weight: 100;
   font-size: 28px;
   margin-top: -20px;
   margin-left: 3px;
   color: #39c;
 }
-h2 span {
+hgroup h2 span {
   color: #bbb;
 }
 h3 {
@@ -92,7 +92,7 @@ button {
   color: #fff;
   height: 58px;
 }
-button:hover {
+button hover {
   cursor: pointer;
 }
 #inputwrap {
@@ -125,7 +125,7 @@ button.go {
   margin-left: 0;
   background: #39c;
 }
-button.go:disabled {
+button.go disabled {
   background: #efefef;
   cursor: default;
   color: #aaa;
@@ -133,9 +133,9 @@ button.go:disabled {
 #when {
   width: 80px;
 }
-/*#resultWrap {
-  height: 50px;
-}*/
+/*#resultWrap  
+  height  50px 
+ */
 #result {
   clear: both;
   margin-top: 50px;
