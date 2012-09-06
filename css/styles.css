@@ -54,8 +54,8 @@ h3 {
   font-size: 36px;
 }
 #info {
-  padding-top: 10px;
-  margin: 0 auto;
+  padding: 20px 0;
+  margin: 0 auto 25px;
   overflow: hidden;
 }
 #info h3 {
@@ -120,12 +120,14 @@ button.go {
   margin-left: 0;
   background: #39c;
   font-weight: 700;
+  font-family: "proxima-nova", helvetica, arial, sans-serif;
 }
 button.go:disabled {
   background: #efefef;
   cursor: default;
-  color: #aaa;
+  color: #bbb;
   font-weight: 700;
+  font-family: "proxima-nova", helvetica, arial, sans-serif;
 }
 #when {
   width: 80px;
@@ -166,6 +168,6 @@ button.go:disabled {
   border-left: thin solid #39c;
   border-right: thin solid #39c;
   height: 400px;
-  width: 860px;
+  width: 880px;
   margin: 40px auto;
 }
