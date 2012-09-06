@@ -4,7 +4,7 @@ html, body {
 * {
   margin: 0;
   padding: 0;
-  font-family: helvetica, arial, sans-serif;
+  font-family: "museo", helvetica, arial, sans-serif;
 }
 a {
   text-decoration: none;
@@ -19,27 +19,36 @@ a {
 }
 header {
   padding-bottom: 60px;
+  overflow: hidden;
+  width: 400px;
+  margin: 0 auto;
 }
 img {
-  vertical-align: top;
-  padding-right: 25px;
+  /*padding-right: 25px;*/
+  float: left;
+  padding-top: 15px;
+}
+hgroup {
+    text-align: left;
+    float: left;
 }
 h1 {
-  margin-top: 50px;
-  font-size: 72px;
+  font-size: 100px;
   letter-spacing: -4px;
-  display: inline;
+  font-weight: 800;
+  font-family: "proxima-nova", helvetica, arial, sans-serif;
 }
 h2 {
-  margin: -24px 0 0 90px;
-  letter-spacing: -1px;
+  font-weight: 100;
+  font-size: 28px;
+  margin-top: -20px;
+  margin-left: 3px;
 }
 h2 span {
   color: gray;
 }
 h3 {
   font-size: 36px;
-  letter-spacing: -2px;
 }
 #info {
   padding-top: 10px;
