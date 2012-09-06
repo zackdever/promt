@@ -48,6 +48,7 @@ hgroup h2 {
 }
 hgroup h2 span {
   color: #bbb;
+  font-family: "museo", helvetica, arial, sans-serif;
 }
 h3 {
   font-size: 36px;
