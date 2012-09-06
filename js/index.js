@@ -1,6 +1,6 @@
 (function() {
 
-  var autoComplete, here, map, mapEl, there, thereEl, whenEl;
+  var autoComplete, here, map, mapEl, there, thereMarker, thereEl, whenEl;
   var directionsService = new google.maps.DirectionsService();
   var directionsDisplay = new google.maps.DirectionsRenderer();
   var geocoder = new google.maps.Geocoder();
@@ -90,6 +90,17 @@
         }
 
         directionsDisplay.setDirections(result);
+        // clear the old destination marker if it exists
+        if (thereMarker != null) thereMarker.setMap(null);
+        // place a marker on the destination
+        thereMarker = new google.maps.Marker({
+          position: there.geometry.location,
+          animation: google.maps.Animation.DROP,
+          icon:'/images/you-are-here.png',
+          map: map,
+          title:"Your journey's conclusion"
+        });
+
         callback(seconds);
       }
     });
@@ -126,7 +137,7 @@
 
           // build the map
           mapOptions.center = latlng;
-          var map = new google.maps.Map(mapEl, mapOptions);
+          map = new google.maps.Map(mapEl, mapOptions);
 
           // show the map
           directionsDisplay.suppressMarkers = true;
@@ -165,7 +176,6 @@
       }
     }
 
-    console.log(bounds);
     if (bounds != null) autoComplete.setBounds(bounds);
   }
 
