@@ -19,7 +19,7 @@ a
   padding-top  50px 
  
 header  
-  padding-bottom  60px 
+  padding-bottom  25px 
   overflow  hidden 
   width  400px 
   margin  0 auto 
@@ -57,16 +57,11 @@ h3
   h3  
     padding-top  10px 
  
-#duration  
-  font-size  70% 
-  color  white 
- 
-input, button  
-  border  none 
-  font-size  16px 
-  font-size  32px 
-  font-weight  600 
-  letter-spacing  -1px 
+  input, button  
+    border  none 
+    font-size  16px 
+    font-size  32px 
+    letter-spacing  -1px 
  
 /* a single google autofill result */
 .pac-item  
@@ -88,22 +83,8 @@ button
   color  white 
   height  58px 
  
-button hover  
+button:hover  
   cursor  pointer 
- 
-#inputwrap  
-  position  relative 
-  margin  0 20px 
- 
-#inputwrap .example  
-  font-weight  400 
-  color  #bbb 
-  font-size  12px 
-  letter-spacing  0px 
-  position  absolute 
-  width  100% 
-  left  0 
-  bottom  -30px 
  
 input  
   background  #efefef 
@@ -111,6 +92,20 @@ input
   height  60px 
   padding  0 20px 
   font-weight  300 
+
+#inputwrap  
+  position  relative 
+  margin  0 20px 
+ 
+  .example  
+    font-weight  300 
+    color  #bbb 
+    font-size  12px 
+    letter-spacing  0px 
+    position  absolute 
+    width  100% 
+    left  0 
+    bottom  -30px 
  
 input#there  
   margin  0 20px 
@@ -120,41 +115,36 @@ button.go
   height  60px 
   margin-left  0 
   background  #3399cc 
+  font-weight 700
  
-button.go disabled  
+button.go:disabled  
   background  #efefef 
   cursor  default 
   color  #aaa 
+  font-weight 700
  
 #when  
   width  80px 
  
-/*#resultWrap  
-  height  50px 
- */
 #result  
   clear  both 
   margin-top  50px 
   padding  25px 0 
   font-size  24px 
   font-weight  100 
-  border-top  thin solid #efefef 
-  border-bottom  thin solid #efefef 
+  border-top  thin solid #0066cc
+  border-bottom  thin solid #0066cc 
   display  none 
   background  #3399cc 
   color  white 
+  p, span
+    font-family  "proxima-nova", helvetica, arial, sans-serif 
+
+  #duration  
+    font-size  70% 
+    color  white 
  
 .smallprint  
-  font-size  10px 
-  clear  both 
-  text-align  center 
- 
-.smallprintgoogle  
-  width  120px 
-  position  absolute 
-  bottom  25px 
-  left  50% 
-  margin-left  -60px 
   font-size  10px 
   clear  both 
   text-align  center 
