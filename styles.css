@@ -17,89 +17,86 @@ a {
   text-align: center;
   padding-top: 50px;
 }
-header {
+#container header {
   padding-bottom: 60px;
   overflow: hidden;
   width: 400px;
   margin: 0 auto;
 }
-img {
-/*padding-right: 25px;*/
+#container header img {
   float: left;
   padding-top: 15px;
 }
-hgroup {
+#container header hgroup {
   text-align: left;
   float: left;
 }
-h1 {
+#container header h1 {
   font-size: 100px;
   letter-spacing: -4px;
   font-weight: 800;
   font-family: "proxima-nova", helvetica, arial, sans-serif;
   color: #333;
 }
-h2 {
+#container header h2 {
   font-weight: 100;
   font-size: 28px;
   margin-top: -20px;
   margin-left: 3px;
   color: #39c;
 }
-h2 span {
+#container header h2 span {
   color: #bbb;
 }
-h3 {
-  font-size: 36px;
-}
-#info {
+#container #info {
   padding-top: 10px;
   margin: 0 auto;
   overflow: hidden;
+/* a single google autofill result */
 }
-#info h3 {
+#container #info h3 {
+  font-size: 36px;
   padding-top: 10px;
 }
-#duration {
+#container #info #duration {
   font-size: 70%;
   color: #fff;
 }
-input,
-button {
+#container #info input,
+#container #info button {
   border: none;
   font-size: 16px;
   font-size: 32px;
   font-weight: 600;
   letter-spacing: -1px;
 }
-/* a single google autofill result */
-.pac-item {
+#container #info .pac-item {
   margin: 0 20px;
   font-size: 20px;
 }
-.pac-container {
+#container #info .pac-container {
   padding-top: 10px;
 }
-.pac-item {
+#container #info .pac-item {
   font-size: 14px;
   font-weight: 100;
   padding: 10px 5px;
   color: #444;
 }
-button {
+#container #info button {
   width: 150px;
   background: #000;
   color: #fff;
   height: 58px;
 }
-button:hover {
+#container #info button hover {
   cursor: pointer;
 }
-#inputwrap {
+#container #info #inputwrap {
   position: relative;
   margin: 0 20px;
 }
-#inputwrap .example {
+#container #info #inputwrap .example {
   font-weight: 400;
   color: #bbb;
   font-size: 12px;
@@ -109,34 +106,31 @@ button:hover {
   left: 0;
   bottom: -30px;
 }
-input {
+#container #info input {
   background: #efefef;
   width: 350px;
   height: 60px;
   padding: 0 20px;
   font-weight: 300;
 }
-input#there {
+#container #info input#there {
   margin: 0 20px;
 }
-button.go {
+#container #info button.go {
   width: 100px;
   height: 60px;
   margin-left: 0;
   background: #39c;
 }
-button.go:disabled {
+#container #info button.go disabled {
   background: #efefef;
   cursor: default;
   color: #aaa;
 }
-#when {
+#container #info #when {
   width: 80px;
 }
-/*#resultWrap {
-  height: 50px;
-}*/
-#result {
+#container #result {
   clear: both;
   margin-top: 50px;
   padding: 25px 0;
@@ -148,27 +142,17 @@ button.go:disabled {
   background: #39c;
   color: #fff;
 }
-.smallprint {
+#container #result .smallprint {
   font-size: 10px;
   clear: both;
   text-align: center;
 }
-.smallprintgoogle {
-  width: 120px;
-  position: absolute;
-  bottom: 25px;
-  left: 50%;
-  margin-left: -60px;
-  font-size: 10px;
-  clear: both;
-  text-align: center;
-}
-.bold,
-.location {
+#container .bold,
+#container .location {
   font-weight: 700;
   color: #fff;
 }
-#map {
+#container #map {
   border-top: thick solid #39c;
   border-bottom: thick solid #39c;
   border-left: thin solid #39c;
