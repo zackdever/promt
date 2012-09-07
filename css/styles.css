@@ -136,7 +136,7 @@ button.go:disabled {
 }
 #resultwrap {
   height: 100px;
-  margin: 2px auto;
+  margin: 0 auto -3px;
 }
 #resultwrap #result {
   clear: both;
@@ -171,10 +171,10 @@ button.go:disabled {
   color: #fff;
 }
 #map {
-  border-top: thick solid #39c;
-  border-bottom: thick solid #39c;
-  border-left: thin solid #39c;
-  border-right: thin solid #39c;
+  border-top: thick solid #06c;
+  border-bottom: thick solid #06c;
+  border-left: thin solid #06c;
+  border-right: thin solid #06c;
   height: 400px;
   width: 880px;
   margin: 0 auto;
