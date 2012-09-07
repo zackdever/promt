@@ -8,7 +8,7 @@
   var geoOptions = {maximumAge: 10000};
 
   // b&w google maps styling credit: http://www.wherethefuckshouldigotoeat.com
-  var lowSat = [{featureType: 'all', 
+  var lowSat = [{featureType: 'all',
     stylers: [{saturation: -100 }]}];
   var mapOptions = {
     zoom: 16,
@@ -33,7 +33,9 @@
         bindAutoSelectOnEnterOrTab(thereEl);
         $('button').click(calculateTimes);
         google.maps.event.addListener(autoComplete, 'place_changed', onThereChanged);
-        $('#there').focusout(function() { $('.go').prop('disabled', this.value.length == 0); });
+        $('#there').focusout(function() {
+          $('.go').prop('disabled', there == undefined);
+        });
       } else {
         log('current location was not set');
       }
