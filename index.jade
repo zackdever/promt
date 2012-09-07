@@ -26,14 +26,13 @@ html
               input(placeholder='ASAP')#when
               span.example ex: "asap" or "7.45"
             button(disabled=true).go GO!
-
-      #result
-        p
-          span#time
-          &nbsp;
-          span#duration
-        br
-        p.smallprint (though no promise on traffic)
+      #resultwrap
+        #result
+          p
+            span#time
+            &nbsp;
+            span#duration
+          p.smallprint (though no promise on traffic)
 
       #map
 

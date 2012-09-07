@@ -1,8 +1,7 @@
 @import '../node_modules/nib/lib/nib'
 
 html, body  
-  height  100% 
- 
+  height  100%  
 
 *  
   margin  0 
@@ -18,7 +17,7 @@ a
   border-top  thick solid #3399cc 
   min-height  100% 
   text-align  center 
-  padding-top  50px 
+  padding-top  25px 
  
 header  
   padding-bottom  25px 
@@ -126,27 +125,30 @@ button.go:disabled
  
 #when  
   width  80px 
- 
-#result  
-  clear  both 
-  margin-top  50px 
-  padding  25px 0 
-  font-size  24px 
-  font-weight  100 
-  border-top  thin solid #0066cc
-  border-bottom  thin solid #0066cc 
-  display  none 
-  background linear-gradient(bottom,  #0066cc, 100% #3399cc)
-  color  white 
+#resultwrap
+  height 100px
+  margin 2px auto
+  // width 882px
+  #result  
+    clear  both 
+    padding  25px 0 
+    font-size  24px 
+    font-weight  100
+    border-top  thin solid #0066cc
+    border-bottom  thin solid #0066cc
+    display  none
+    background linear-gradient(bottom,  #0066cc, 100% #3399cc)
+    color white 
+    height 50px
+    #duration
+      font-size  70%
+      color  white 
 
-  #duration  
-    font-size  70% 
-    color  white 
- 
 .smallprint  
   font-size  10px 
   clear  both 
   text-align  center 
+  padding-top 10px
  
 .bold, .location  
   font-weight  700 
@@ -159,6 +161,6 @@ button.go:disabled
   border-right  thin solid #3399cc 
   height  400px 
   width  880px 
-  margin  40px auto 
+  margin  0 auto
  
 

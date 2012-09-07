@@ -15,7 +15,7 @@ a {
   border-top: thick solid #39c;
   min-height: 100%;
   text-align: center;
-  padding-top: 50px;
+  padding-top: 25px;
 }
 header {
   padding-bottom: 25px;
@@ -134,9 +134,12 @@ button.go:disabled {
 #when {
   width: 80px;
 }
-#result {
+#resultwrap {
+  height: 100px;
+  margin: 2px auto;
+}
+#resultwrap #result {
   clear: both;
-  margin-top: 50px;
   padding: 25px 0;
   font-size: 24px;
   font-weight: 100;
@@ -150,8 +153,9 @@ button.go:disabled {
   background: -ms-linear-gradient(bottom, #06c 0%, #39c 100%);
   background: linear-gradient(bottom, #06c 0%, #39c 100%);
   color: #fff;
+  height: 50px;
 }
-#result #duration {
+#resultwrap #result #duration {
   font-size: 70%;
   color: #fff;
 }
@@ -159,6 +163,7 @@ button.go:disabled {
   font-size: 10px;
   clear: both;
   text-align: center;
+  padding-top: 10px;
 }
 .bold,
 .location {
@@ -172,5 +177,5 @@ button.go:disabled {
   border-right: thin solid #39c;
   height: 400px;
   width: 880px;
-  margin: 40px auto;
+  margin: 0 auto;
 }

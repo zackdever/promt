@@ -66,8 +66,8 @@
 
       $('#duration').text(duration);
       $('#time').html(result);
-      $('#result').slideDown('slow', '');
-      // scrollToAnchor('no-fluff');
+      $('#result').fadeIn('slow','');
+      scrollToAnchor('no-fluff');
     });
   }
 
