@@ -12,8 +12,7 @@ Hat tip to [WTFSIGTE][2].
 Development
 -----------
 
-    $ npm install
-    $ serve .
+    $ script/server
 
 [0]: http://promtapp.com
 [1]: https://developers.google.com/maps/documentation/javascript/places
