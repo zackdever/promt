@@ -1,6 +1,7 @@
 (function() {
 
-  var autoComplete, here, map, mapEl, there, thereMarker, thereEl, whenEl;
+  var autoComplete, here, map, mapEl,
+      there, thereMarker, thereEl, thereText, whenEl;
   var directionsService = new google.maps.DirectionsService();
   var directionsDisplay = new google.maps.DirectionsRenderer();
   var geocoder = new google.maps.Geocoder();
@@ -32,19 +33,25 @@
       if (success) {
         bindAutoSelectOnEnterOrTab(thereEl);
         $('button').click(calculateTimes);
-        google.maps.event.addListener(autoComplete, 'place_changed', onThereChanged);
-        $('#there').focusout(function() {
-          $('.go').prop('disabled', there == undefined);
-        });
+        google.maps.event.addListener(autoComplete, 'place_changed', onAutoSelectionChanged);
+        $('#there').focusout(onThereLosesFocus);
       } else {
         log('current location was not set');
       }
     });
   });
 
+  function onThereLosesFocus() {
+    if (there != undefined && thereText != thereEl.value) {
+      setTimeout(function() {
+        thereEl.value = thereText;
+      }, 0); // WTF. doesn't work if not inside a setTimeout.
+    }
+  }
 
-  function onThereChanged() {
+  function onAutoSelectionChanged() {
     there = autoComplete.getPlace();
+    thereText = thereEl.value;
     $('.go').prop('disabled', false);
   }
 
