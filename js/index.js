@@ -32,7 +32,7 @@
     setCurrentLocation(function(success) {
       if (success) {
         bindAutoSelectOnEnterOrTab(thereEl);
-        $('button').click(calculateTimes);
+        $('button').click(getDirections);
         google.maps.event.addListener(autoComplete, 'place_changed', onAutoSelectionChanged);
         $('#there').focusout(onThereLosesFocus);
       } else {
@@ -55,29 +55,36 @@
     $('.go').prop('disabled', false);
   }
 
-  function calculateTimes() {
+  function directionsSuccess(seconds) {
     var when = whenEl.value;
+    var duration = '';
+    var result = 'From where ' + '<span class="location">you&apos;re sat</span>' + ', you&apos;ll ';
 
-    getDurationToThere(function(seconds) {
-      var duration = '';
-      var result = 'From where ' + '<span class="location">you&apos;re sat</span>' + ', you&apos;ll ';
+    if (when) {
+      var arrival = Time.parseToDate(when);
+      var departure = moment(arrival).subtract('seconds', seconds).format('h:mm a');
+      result += 'need to leave around <span class="bold">' + departure + '</span>';
+    } else {
+      var arrival = moment().add('seconds', seconds).format('h:mm a');
+      var durationSeconds = moment.duration(seconds, 'seconds').humanize();
+      duration = '(about ' + durationSeconds + ')';
+      result += 'get there around <span class="bold">' + arrival + '</span>';
+    }
 
-      if (when) {
-        var arrival = Time.parseToDate(when);
-        var departure = moment(arrival).subtract('seconds', seconds).format('h:mm a');
-        result += 'need to leave around <span class="bold">' + departure + '</span>';
-      } else {
-        var arrival = moment().add('seconds', seconds).format('h:mm a');
-        var durationSeconds = moment.duration(seconds, 'seconds').humanize();
-        duration = '(about ' + durationSeconds + ')';
-        result += 'get there around <span class="bold">' + arrival + '</span>';
-      }
+    $('#duration').text(duration);
+    $('#time').html(result);
+    $('#traffic').show();
+    $('#result').fadeIn('slow','');
+    scrollToAnchor('no-fluff');
+  }
 
-      $('#duration').text(duration);
-      $('#time').html(result);
-      $('#result').fadeIn('slow','');
-      scrollToAnchor('no-fluff');
-    });
+  function directionsFail(error) {
+    centerMapAtHome();
+    $('#duration').hide();
+    $('#time').html('Uh... we have no idea how to get there. Good luck!');
+    $('#traffic').hide();
+    $('#result').fadeIn('slow','');
+    scrollToAnchor('no-fluff');
   }
 
   function scrollToAnchor(aid){
@@ -85,11 +92,14 @@
     $('html,body').animate({scrollTop: aTag.offset().top},'slow');
   }
 
-  function getDurationToThere(callback) {
+  function getDirections() {
     var request = buildRequest(there);
     directionsService.route(request, function(result, status) {
+      // clear the old destination marker if it exists
+      if (thereMarker != null) thereMarker.setMap(null);
+
       if (google.maps.DirectionsStatus.OK !== status) {
-        callback('shucks. something is amiss');
+        directionsFail(google.maps.DirectionsStatus);
       } else {
         var legs = result.routes[0].legs;
         var seconds = 0;
@@ -99,8 +109,6 @@
         }
 
         directionsDisplay.setDirections(result);
-        // clear the old destination marker if it exists
-        if (thereMarker != null) thereMarker.setMap(null);
         // place a marker on the destination
         thereMarker = new google.maps.Marker({
           position: there.geometry.location,
@@ -110,7 +118,7 @@
           title:"Your journey's conclusion"
         });
 
-        callback(seconds);
+        directionsSuccess(seconds);
       }
     });
   }
@@ -132,11 +140,19 @@
     }
   }
 
+  function centerMapAtHome() {
+    if (here != undefined) {
+      directionsDisplay.setMap(null);
+      map.setCenter(here.latlng);
+      map.setZoom(mapOptions.zoom);
+    }
+  }
+
   function setGeoLocation(callback) {
     navigator.geolocation.getCurrentPosition(function(position) {
       here = position;
-      var latlng = new google.maps.LatLng(here.coords.latitude, here.coords.longitude);
-      geocoder.geocode({location: latlng}, function(results, status) {
+      here.latlng = new google.maps.LatLng(here.coords.latitude, here.coords.longitude);
+      geocoder.geocode({location: here.latlng}, function(results, status) {
         if (status != google.maps.GeocoderStatus.OK) {
           log(status);
           callback(false);
@@ -145,7 +161,7 @@
           setAutoCompleteBounds(results, 'locality');
 
           // build the map
-          mapOptions.center = latlng;
+          mapOptions.center = here.latlng;
           map = new google.maps.Map(mapEl, mapOptions);
 
           // show the map
@@ -154,7 +170,7 @@
 
           // place a marker on the current location
           var marker = new google.maps.Marker({
-            position: latlng,
+            position: here.latlng,
             animation: google.maps.Animation.DROP,
             icon:'/images/you-are-here.png',
             map: map,
