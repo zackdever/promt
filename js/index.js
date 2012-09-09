@@ -1,5 +1,4 @@
 (function() {
-  // TODO better handling if geo location is accepted after finding destination
   var $there, activePage, autoComplete, hereMarker, thereMarker, map, pages, there;
 
   // goog objects
@@ -215,6 +214,8 @@
             showPage(pages.there, function() {
               // this gives better city wide results, but less localized
               setHere(location, getBounds(results, 'locality'));
+                // in case they allowed access after getting directions
+                if (thereMarker != null) getDirections();
             });
           }
         });
