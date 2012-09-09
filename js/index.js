@@ -1,7 +1,6 @@
 (function() {
 
   // TODO better handling if geo location is accepted after finding destination
-  // TODO enter on manual location logs error
 
   var activePage, autoComplete, hereMarker, thereMarker, map, pages, there;
   var $map, $there, $when;
@@ -38,15 +37,11 @@
     initDocument();
     showManualHomeEntry();
 
-    setCurrentLocation(function(success) {
-      if (success) {
-      } else {
-        log('current location was not set');
-      }
-    });
+    if (navigator.geolocation) setGeoLocation();
   });
 
   function initDocument() {
+    var hereEl = document.getElementById('here');
     // init "pages"
     pages = {
         manual    : '#old-school, #phonehome'
@@ -56,7 +51,7 @@
 
     // init manual location entry
     map = new google.maps.Map($map[0], mapOptions);
-    var hereAuto = new google.maps.places.Autocomplete($('#here')[0], {});
+    var hereAuto = new google.maps.places.Autocomplete(hereEl, {});
     google.maps.event.addListener(hereAuto, 'place_changed', function() {
       var geometry = hereAuto.getPlace().geometry;
       setHere(geometry.location, geometry.bounds);
@@ -70,7 +65,7 @@
     // init 'there' elements
     autoComplete = new google.maps.places.Autocomplete($there[0], {});
     google.maps.event.addListener(autoComplete, 'place_changed', onAutoSelectionChanged);
-    bindAutoSelectOnEnterOrTab($there[0]);
+    bindAutoSelectOnEnterOrTab([$there[0], hereEl]);
     $('.go').click(getDirections);
     $there.focusout(onThereLosesFocus);
   }
@@ -204,15 +199,6 @@
     };
   }
 
-  function setCurrentLocation(callback) {
-    if (navigator.geolocation) {
-      setGeoLocation(callback);
-    } else {
-      log('geo location not supported');
-      callback(false);
-    }
-  }
-
   function centerMapAtHome() {
     if (hereMarker != undefined) {
       directionsDisplay.setMap(null);
@@ -224,9 +210,8 @@
   function setGeoLocation(callback) {
     navigator.geolocation.getCurrentPosition(function(position) {
       showPage(pages.searching, function() {
-        var location = new google.maps.LatLng(
-          position.coords.latitude, position.coords.longitude
-        );
+        var location = new google.maps.LatLng(position.coords.latitude
+                                              , position.coords.longitude);
         geocoder.geocode({location: location}, function(results, status) {
           if (status != google.maps.GeocoderStatus.OK) {
             log(status);
@@ -269,27 +254,31 @@
   }
 
   // credit: http://stackoverflow.com/a/11703018/962091
-  function bindAutoSelectOnEnterOrTab(input) {
-    // store the original event binding function
-    var _addEventListener = (input.addEventListener) ? input.addEventListener : input.attachEvent;
+  function bindAutoSelectOnEnterOrTab(inputs) {
+    for (var i = 0; i < inputs.length; i++) {
+      var input = inputs[i];
+      // store the original event binding function
+      var _addEventListener = (input.addEventListener) ?
+        input.addEventListener : input.attachEvent;
 
-    function addEventListenerWrapper(type, listener) {
-      // Simulate a 'down arrow' keypress on hitting 'return' or 'tab'
-      // when no pac suggestion is selected, and then trigger the original listener.
-      if (type == 'keydown') {
-        var orig_listener = listener;
-        listener = function(event) {
-          var suggestion_selected = $('.pac-item.pac-selected').length > 0;
-          if ((event.which == 13 || event.which == 9) && !suggestion_selected) {
-            var simulated_downarrow = $.Event('keydown', { keyCode: 40, which: 40 });
-            orig_listener.apply(input, [simulated_downarrow]);
-          }
-          orig_listener.apply(input, [event]);
-        };
+      function addEventListenerWrapper(type, listener) {
+        // Simulate a 'down arrow' keypress on hitting 'return' or 'tab'
+        // when no pac suggestion is selected, and then trigger the original listener.
+        if (type == 'keydown') {
+          var orig_listener = listener;
+          listener = function(event) {
+            var suggestion_selected = $('.pac-item.pac-selected').length > 0;
+            if ((event.which == 13 || event.which == 9) && !suggestion_selected) {
+              var simulated_downarrow = $.Event('keydown', { keyCode: 40, which: 40 });
+              orig_listener.apply(input, [simulated_downarrow]);
+            }
+            orig_listener.apply(input, [event]);
+          };
+        }
+        _addEventListener.apply(input, [type, listener]);
       }
-      _addEventListener.apply(input, [type, listener]);
+      input.addEventListener = addEventListenerWrapper;
+      input.attachEvent = addEventListenerWrapper;
     }
-    input.addEventListener = addEventListenerWrapper;
-    input.attachEvent = addEventListenerWrapper;
   }
 })();
