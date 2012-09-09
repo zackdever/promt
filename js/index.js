@@ -1,7 +1,9 @@
 (function() {
 
   // TODO better handling if geo location is accepted after finding destination
-  var autoComplete, hereMarker, thereMarker, map, there;
+  // TODO enter on manual location logs error
+
+  var activePage, autoComplete, hereMarker, thereMarker, map, pages, there;
   var $map, $there, $when;
 
   // goog objects
@@ -45,6 +47,13 @@
   });
 
   function initDocument() {
+    // init "pages"
+    pages = {
+        manual    : '#old-school, #phonehome'
+      , searching : '#searching'
+      , there     : '#there-input'
+    };
+
     // init manual location entry
     map = new google.maps.Map($map[0], mapOptions);
     var hereAuto = new google.maps.places.Autocomplete($('#here')[0], {});
@@ -55,10 +64,7 @@
     });
 
     $('#phonehome').click(function() {
-      $('#phonehome').fadeOut()
-      $('#old-school').fadeOut(function() {
-        $('#there-input').fadeIn();
-      });
+      showPage(pages.there);
     });
 
     // init 'there' elements
@@ -69,14 +75,26 @@
     $there.focusout(onThereLosesFocus);
   }
 
+  function showPage(page, callback) {
+    function show() {
+      activePage = page;
+      $(page).fadeIn();
+      $(page).promise().done(callback);
+    }
+
+    if (activePage != null) {
+      $(activePage).fadeOut();
+      $(activePage).promise().done(show);
+    } else {
+      show();
+    }
+  }
+
   function showManualHomeEntry() {
     clearHereMarker();
     map.setCenter(center);
     map.setZoom(1);
-    $('#there-input').fadeOut(function() {
-      $('#old-school').fadeIn();
-      $('#phonehome').fadeIn()
-    });
+    showPage(pages.manual);
   }
 
   function clearHereMarker() {
@@ -205,28 +223,20 @@
 
   function setGeoLocation(callback) {
     navigator.geolocation.getCurrentPosition(function(position) {
-      $('#phonehome').fadeOut();
-      $('#old-school').fadeOut(function() {
-        $('#searching').fadeIn(function() {
-          var location = new google.maps.LatLng(
-            position.coords.latitude, position.coords.longitude
-          );
-
-          geocoder.geocode({location: location}, function(results, status) {
-
-            if (status != google.maps.GeocoderStatus.OK) {
-              log(status);
-              callback(false);
-            } else {
-              $('#phonehome').fadeOut();
-              $('#searching').fadeOut(function() {
-                $('#there-input').fadeIn(function() {
-                  setHere(location, getBounds(results, 'locality'));
-                  callback(true);
-                });
-              });
-            }
-          });
+      showPage(pages.searching, function() {
+        var location = new google.maps.LatLng(
+          position.coords.latitude, position.coords.longitude
+        );
+        geocoder.geocode({location: location}, function(results, status) {
+          if (status != google.maps.GeocoderStatus.OK) {
+            log(status);
+            callback(false);
+          } else {
+            showPage(pages.there, function() {
+              setHere(location, getBounds(results, 'locality'));
+              callback(true);
+            });
+          }
         });
       });
     }, function(error) {
@@ -254,8 +264,8 @@
   }
 
   function scrollToAnchor(aid) {
-    var aTag = $("a[name='"+ aid +"']");
-    $('html,body').animate({ scrollTop: aTag.offset().top }, 'slow');
+    var aTag = $("a[name='" + aid + "']");
+    $('html, body').animate({ scrollTop: aTag.offset().top }, 'slow');
   }
 
   // credit: http://stackoverflow.com/a/11703018/962091
