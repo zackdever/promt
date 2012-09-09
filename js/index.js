@@ -37,9 +37,15 @@
     var hereEl = document.getElementById('here');
     // init "pages"
     pages = {
-        manual    : '#old-school, #phonehome'
-      , searching : '#searching'
-      , there     : '#there-input'
+        manual    : {
+            selector : '#old-school, #phonehome'
+          , onLoad   : function() { $('#where').focus(); }
+        }
+      , searching : { selector : '#searching' }
+      , there     : {
+            selector : '#there-input'
+          , onLoad   : function() { $there.focus(); }
+        }
     };
 
     // init manual location entry
@@ -49,6 +55,7 @@
       var geometry = hereAuto.getPlace().geometry;
       setHere(geometry.location, geometry.bounds);
       $('#phonehome').prop('disabled', false);
+      $('#phonehome').focus();
     });
 
     $('#phonehome').click(function() {
@@ -68,13 +75,16 @@
   function showPage(page, callback) {
     function show() {
       activePage = page;
-      $(page).fadeIn();
-      $(page).promise().done(callback);
+      $(page.selector).fadeIn();
+      $(page.selector).promise().done(function() {
+        if (page.onLoad != undefined) page.onLoad();
+        if (callback != undefined) callback();
+      });
     }
 
     if (activePage != null) {
-      $(activePage).fadeOut();
-      $(activePage).promise().done(show);
+      $(activePage.selector).fadeOut();
+      $(activePage.selector).promise().done(show);
     } else {
       show();
     }
@@ -120,12 +130,11 @@
     $('.go').prop('disabled', false);
   }
 
-  function directionsSuccess(seconds, when) {
+  function directionsSuccess(seconds, arrival) {
     var duration = ''
       , result = 'From where <span class="location">you&apos;re sat</span> you&apos;ll ';
 
     if (when) {
-      var arrival = Time.parseToDate(when);
       var departure = moment(arrival).subtract('seconds', seconds).format('h:mm a');
       result += 'need to leave around <span class="bold">' + departure + '</span>';
     } else {
@@ -153,7 +162,8 @@
 
   function getDirections() {
     var request = buildRequest(there)
-      , when = document.getElementById('when').value;
+      , when = Time.parseToDate(document.getElementById('when').value);
+
     directionsService.route(request, function(result, status) {
       // clear the old destination marker if it exists
       if (thereMarker != null) thereMarker.setMap(null);

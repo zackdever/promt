@@ -20,6 +20,7 @@
 
   Time.parseToDate = function(time) {
     var result = Time.parse(time);
+    if (result == null) return null;
     return toDate(result.hours, result.minutes);
   }
 
