@@ -1,64 +1,121 @@
 (function() {
 
-  var autoComplete, here, map, mapEl,
-      there, thereMarker, thereEl, thereText, whenEl;
-  var directionsService = new google.maps.DirectionsService();
-  var directionsDisplay = new google.maps.DirectionsRenderer();
-  var geocoder = new google.maps.Geocoder();
-  var autoCompleteOptions = { /*types: ['establishment']*/ };
-  var geoOptions = {maximumAge: 10000};
+  // TODO better handling if geo location is accepted after finding destination
+  var autoComplete, hereMarker, thereMarker, map, there;
+  var $map, $there, $when;
 
-  // b&w google maps styling credit: http://www.wherethefuckshouldigotoeat.com
-  var lowSat = [{featureType: 'all',
-    stylers: [{saturation: -100 }]}];
-  var mapOptions = {
-    zoom: 16,
-    mapTypeId: google.maps.MapTypeId.ROADMAP,
-    styles: lowSat,
-    mapTypeControl: false,
-    panControl: false,
-    zoomControl: false,
-    scaleControl: false,
-    streetViewControl: false,
-    overviewMapControl: false
-  };
+  // goog objects
+  var center            = new google.maps.LatLng(20, -95)
+    , directionsDisplay = new google.maps.DirectionsRenderer()
+    , directionsService = new google.maps.DirectionsService()
+    , geocoder          = new google.maps.Geocoder();
+
+  // configs
+  var geoOptions = {maximumAge: 10000}
+    , lowSat = [{featureType: 'all', stylers: [{saturation: -100 }]}]
+    , mapOptions = {
+          center             : center
+        , mapTypeControl     : false
+        , mapTypeId          : google.maps.MapTypeId.ROADMAP
+        , overviewMapControl : false
+        , panControl         : false
+        , scaleControl       : false
+        , streetViewControl  : false
+        , styles             : lowSat
+        , zoom               : 16
+        , zoomControl        : false
+      }
+    , markerIcon = '/images/you-are-here.png';
 
   // kick things off
   $(function() {
-    thereEl = document.getElementById('there');
-    mapEl   = document.getElementById('map');
-    whenEl  = document.getElementById('when');
+    $there = $('#there');
+    $map   = $('#map');
+    $when  = $('#when');
+
+    initDocument();
+    showManualHomeEntry();
 
     setCurrentLocation(function(success) {
       if (success) {
-        bindAutoSelectOnEnterOrTab(thereEl);
-        $('button').click(getDirections);
-        google.maps.event.addListener(autoComplete, 'place_changed', onAutoSelectionChanged);
-        $('#there').focusout(onThereLosesFocus);
       } else {
         log('current location was not set');
       }
     });
   });
 
+  function initDocument() {
+    // init manual location entry
+    map = new google.maps.Map($map[0], mapOptions);
+    var hereAuto = new google.maps.places.Autocomplete($('#here')[0], {});
+    google.maps.event.addListener(hereAuto, 'place_changed', function() {
+      var geometry = hereAuto.getPlace().geometry;
+      setHere(geometry.location, geometry.bounds);
+      $('#phonehome').prop('disabled', false);
+    });
+
+    $('#phonehome').click(function() {
+      $('#phonehome').fadeOut()
+      $('#old-school').fadeOut(function() {
+        $('#there-input').fadeIn();
+      });
+    });
+
+    // init 'there' elements
+    autoComplete = new google.maps.places.Autocomplete($there[0], {});
+    google.maps.event.addListener(autoComplete, 'place_changed', onAutoSelectionChanged);
+    bindAutoSelectOnEnterOrTab($there[0]);
+    $('.go').click(getDirections);
+    $there.focusout(onThereLosesFocus);
+  }
+
+  function showManualHomeEntry() {
+    clearHereMarker();
+    map.setCenter(center);
+    map.setZoom(1);
+    $('#there-input').fadeOut(function() {
+      $('#old-school').fadeIn();
+      $('#phonehome').fadeIn()
+    });
+  }
+
+  function clearHereMarker() {
+    if (hereMarker != null) hereMarker.setMap(null);
+  }
+
+  function setHere(location, bounds) {
+    if (bounds != null) autoComplete.setBounds(bounds);
+
+    map.setCenter(location);
+    map.setZoom(mapOptions.zoom);
+    clearHereMarker();
+    hereMarker = new google.maps.Marker({
+        animation : google.maps.Animation.DROP
+      , icon      : '/images/you-are-here.png'
+      , map       : map
+      , position  : location
+      , title     : 'You are here!'
+    });
+  }
+
   function onThereLosesFocus() {
-    if (there != undefined && thereText != thereEl.value) {
+    if (there != undefined && there.text != $there.val()) {
       setTimeout(function() {
-        thereEl.value = thereText;
+        $there.val(there.text);
       }, 0); // WTF. doesn't work if not inside a setTimeout.
     }
   }
 
   function onAutoSelectionChanged() {
     there = autoComplete.getPlace();
-    thereText = thereEl.value;
+    there.text = $there.val();
     $('.go').prop('disabled', false);
   }
 
   function directionsSuccess(seconds) {
-    var when = whenEl.value;
-    var duration = '';
-    var result = 'From where ' + '<span class="location">you&apos;re sat</span>' + ', you&apos;ll ';
+    var duration = ''
+      , result = 'From where <span class="location">you&apos;re sat</span> you&apos;ll '
+      , when = $when.val();
 
     if (when) {
       var arrival = Time.parseToDate(when);
@@ -87,11 +144,6 @@
     scrollToAnchor('no-fluff');
   }
 
-  function scrollToAnchor(aid){
-    var aTag = $("a[name='"+ aid +"']");
-    $('html,body').animate({scrollTop: aTag.offset().top},'slow');
-  }
-
   function getDirections() {
     var request = buildRequest(there);
     directionsService.route(request, function(result, status) {
@@ -108,14 +160,17 @@
           seconds += legs[i].duration.value;
         }
 
+        directionsDisplay.suppressMarkers = true;
         directionsDisplay.setDirections(result);
+        directionsDisplay.setMap(map);
+
         // place a marker on the destination
         thereMarker = new google.maps.Marker({
-          position: there.geometry.location,
-          animation: google.maps.Animation.DROP,
-          icon:'/images/you-are-here.png',
-          map: map,
-          title:"Your journey's conclusion"
+            animation : google.maps.Animation.DROP
+          , icon      : markerIcon
+          , map       : map
+          , position  : there.geometry.location
+          , title     : "Your journey's conclusion"
         });
 
         directionsSuccess(seconds);
@@ -125,9 +180,9 @@
 
   function buildRequest(there) {
     return {
-      destination : there.geometry.location,
-      origin : here.coords.latitude + ',' + here.coords.longitude,
-      travelMode : google.maps.TravelMode.DRIVING
+        destination : there.geometry.location
+      , origin      : hereMarker.position
+      , travelMode  : google.maps.TravelMode.DRIVING
     };
   }
 
@@ -141,45 +196,38 @@
   }
 
   function centerMapAtHome() {
-    if (here != undefined) {
+    if (hereMarker != undefined) {
       directionsDisplay.setMap(null);
-      map.setCenter(here.latlng);
+      map.setCenter(hereMarker.position);
       map.setZoom(mapOptions.zoom);
     }
   }
 
   function setGeoLocation(callback) {
     navigator.geolocation.getCurrentPosition(function(position) {
-      here = position;
-      here.latlng = new google.maps.LatLng(here.coords.latitude, here.coords.longitude);
-      geocoder.geocode({location: here.latlng}, function(results, status) {
-        if (status != google.maps.GeocoderStatus.OK) {
-          log(status);
-          callback(false);
-        } else {
-          autoComplete = new google.maps.places.Autocomplete(thereEl, autoCompleteOptions);
-          setAutoCompleteBounds(results, 'locality');
+      $('#phonehome').fadeOut();
+      $('#old-school').fadeOut(function() {
+        $('#searching').fadeIn(function() {
+          var location = new google.maps.LatLng(
+            position.coords.latitude, position.coords.longitude
+          );
 
-          // build the map
-          mapOptions.center = here.latlng;
-          map = new google.maps.Map(mapEl, mapOptions);
+          geocoder.geocode({location: location}, function(results, status) {
 
-          // show the map
-          directionsDisplay.suppressMarkers = true;
-          directionsDisplay.setMap(map);
-
-          // place a marker on the current location
-          var marker = new google.maps.Marker({
-            position: here.latlng,
-            animation: google.maps.Animation.DROP,
-            icon:'/images/you-are-here.png',
-            map: map,
-            title:'You are here!'
+            if (status != google.maps.GeocoderStatus.OK) {
+              log(status);
+              callback(false);
+            } else {
+              $('#phonehome').fadeOut();
+              $('#searching').fadeOut(function() {
+                $('#there-input').fadeIn(function() {
+                  setHere(location, getBounds(results, 'locality'));
+                  callback(true);
+                });
+              });
+            }
           });
-
-          here.pretty = results[0].formatted_address;
-          callback(true);
-        }
+        });
       });
     }, function(error) {
       log('navigator.geolocation.getCurrentPosition failed: ' + error);
@@ -187,12 +235,9 @@
     }, geoOptions);
   };
 
-  // sets the bounds on the auto complete box.
-  // this gives preferences to places inside the bounds.
-  //
   // results: google maps geocoder.geocode results
-  // type: the result type to use as a bound e.g. 'locality', 'country'
-  function setAutoCompleteBounds(results, type) {
+  // type: the result type to be returned e.g. 'locality', 'country'
+  function getBounds(results, type) {
     var bounds;
 
     for(var i = 0; i < results.length; i++) {
@@ -201,11 +246,16 @@
       }
     }
 
-    if (bounds != null) autoComplete.setBounds(bounds);
+    return bounds;
   }
 
   function log(message) {
     console.log(message);
+  }
+
+  function scrollToAnchor(aid) {
+    var aTag = $("a[name='"+ aid +"']");
+    $('html,body').animate({ scrollTop: aTag.offset().top }, 'slow');
   }
 
   // credit: http://stackoverflow.com/a/11703018/962091

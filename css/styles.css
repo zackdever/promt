@@ -52,31 +52,41 @@ hgroup h2 span {
 h3 {
   font-size: 36px;
 }
-#info {
+#there-input,
+#searching {
+  display: none;
+}
+#old-school ::-webkit-input-placeholder {
+  text-align: center;
+}
+#old-school :-moz-placeholder {
+  text-align: center;
+}
+#location-input,
+#old-school {
   padding: 20px 0;
   margin: 0 auto 25px;
   overflow: hidden;
+  height: 70px;
 }
-#info h3 {
+#location-input h3,
+#old-school h3 {
   padding-top: 10px;
 }
-#info input,
-#info button {
+input,
+button {
   border: none;
   font-size: 16px;
   font-size: 32px;
 }
-/* a single google autofill result */
-.pac-item {
-  margin: 0 20px;
-  font-size: 20px;
-}
 .pac-container {
   padding-top: 10px;
 }
+/* a single google autofill result */
 .pac-item {
   font-size: 14px;
   font-weight: 100;
+  margin: 0 20px;
   padding: 10px 5px;
   color: #444;
 }
@@ -125,7 +135,7 @@ button.go {
   background: linear-gradient(bottom, #06c 0%, #39c 100%);
   font-weight: 700;
 }
-button.go:disabled {
+button:disabled {
   background: #efefef;
   cursor: default;
   color: #bbb;
@@ -134,11 +144,11 @@ button.go:disabled {
 #when {
   width: 80px;
 }
-#resultwrap {
+#info {
   height: 100px;
   margin: 0 auto -3px;
 }
-#resultwrap #result {
+#info #result {
   clear: both;
   padding: 25px 0;
   font-size: 24px;
@@ -155,7 +165,7 @@ button.go:disabled {
   color: #fff;
   height: 50px;
 }
-#resultwrap #result #duration {
+#info #result #duration {
   font-size: 70%;
   color: #fff;
 }

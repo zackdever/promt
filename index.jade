@@ -16,17 +16,23 @@ html
         hgroup
           h1 Promt.
           h2 <span>un</span>fashionably on time
+      #input
+        #old-school
+          input(autofocus, placeholder='where are you?')#here
+        #searching
+          h3 Hold on a second, it's a big world out there
+        #there-input
+          a(name='no-fluff')
+            h3
+              | Arrive at
+              input#there
+              | by
+              span#inputwrap
+                input(placeholder='ASAP')#when
+                span.example ex: "asap" or "7.45"
+              button(disabled=true).go GO!
       #info
-        a(name='no-fluff')
-          h3
-            | Arrive at
-            input(autofocus)#there
-            | by
-            span#inputwrap
-              input(placeholder='ASAP')#when
-              span.example ex: "asap" or "7.45"
-            button(disabled=true).go GO!
-      #resultwrap
+        button(disabled=true)#phonehome that's me
         #result
           p
             span#time
