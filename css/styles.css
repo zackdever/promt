@@ -62,15 +62,13 @@ h3 {
 #old-school :-moz-placeholder {
   text-align: center;
 }
-#location-input,
-#old-school {
+#input {
   padding: 20px 0;
   margin: 0 auto 25px;
   overflow: hidden;
   height: 70px;
 }
-#location-input h3,
-#old-school h3 {
+#input h3 {
   padding-top: 10px;
 }
 input,
