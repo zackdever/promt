@@ -58,6 +58,7 @@
 
     // init 'there' elements
     autoComplete = new google.maps.places.Autocomplete($there[0], {});
+    autoComplete.bindTo('bounds', map);
     google.maps.event.addListener(autoComplete, 'place_changed', onAutoSelectionChanged);
     bindAutoSelectOnEnterOrTab(hereEl);
     bindAutoSelectOnEnterOrTab($there[0]);
@@ -202,7 +203,7 @@
     }
   }
 
-  function setGeoLocation(callback) {
+  function setGeoLocation() {
     navigator.geolocation.getCurrentPosition(function(position) {
       showPage(pages.searching, function() {
         var location = new google.maps.LatLng(position.coords.latitude
@@ -210,18 +211,16 @@
         geocoder.geocode({location: location}, function(results, status) {
           if (status != google.maps.GeocoderStatus.OK) {
             log(status);
-            callback(false);
           } else {
             showPage(pages.there, function() {
+              // this gives better city wide results, but less localized
               setHere(location, getBounds(results, 'locality'));
-              if (callback != undefined) callback(true);
             });
           }
         });
       });
     }, function(error) {
       log('navigator.geolocation.getCurrentPosition failed: ' + error);
-      callback(false);
     }, geoOptions);
   };
 
