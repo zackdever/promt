@@ -1,9 +1,6 @@
 (function() {
-
   // TODO better handling if geo location is accepted after finding destination
-
-  var activePage, autoComplete, hereMarker, thereMarker, map, pages, there;
-  var $map, $there, $when;
+  var $there, activePage, autoComplete, hereMarker, thereMarker, map, pages, there;
 
   // goog objects
   var center            = new google.maps.LatLng(20, -95)
@@ -31,12 +28,9 @@
   // kick things off
   $(function() {
     $there = $('#there');
-    $map   = $('#map');
-    $when  = $('#when');
 
     initDocument();
     showManualHomeEntry();
-
     if (navigator.geolocation) setGeoLocation();
   });
 
@@ -50,7 +44,7 @@
     };
 
     // init manual location entry
-    map = new google.maps.Map($map[0], mapOptions);
+    map = new google.maps.Map(document.getElementById('map'), mapOptions);
     var hereAuto = new google.maps.places.Autocomplete(hereEl, {});
     google.maps.event.addListener(hereAuto, 'place_changed', function() {
       var geometry = hereAuto.getPlace().geometry;
@@ -65,7 +59,8 @@
     // init 'there' elements
     autoComplete = new google.maps.places.Autocomplete($there[0], {});
     google.maps.event.addListener(autoComplete, 'place_changed', onAutoSelectionChanged);
-    bindAutoSelectOnEnterOrTab([$there[0], hereEl]);
+    bindAutoSelectOnEnterOrTab(hereEl);
+    bindAutoSelectOnEnterOrTab($there[0]);
     $('.go').click(getDirections);
     $there.focusout(onThereLosesFocus);
   }
@@ -125,10 +120,9 @@
     $('.go').prop('disabled', false);
   }
 
-  function directionsSuccess(seconds) {
+  function directionsSuccess(seconds, when) {
     var duration = ''
-      , result = 'From where <span class="location">you&apos;re sat</span> you&apos;ll '
-      , when = $when.val();
+      , result = 'From where <span class="location">you&apos;re sat</span> you&apos;ll ';
 
     if (when) {
       var arrival = Time.parseToDate(when);
@@ -158,7 +152,8 @@
   }
 
   function getDirections() {
-    var request = buildRequest(there);
+    var request = buildRequest(there)
+      , when = document.getElementById('when').value;
     directionsService.route(request, function(result, status) {
       // clear the old destination marker if it exists
       if (thereMarker != null) thereMarker.setMap(null);
@@ -186,7 +181,7 @@
           , title     : "Your journey's conclusion"
         });
 
-        directionsSuccess(seconds);
+        directionsSuccess(seconds, when);
       }
     });
   }
@@ -219,7 +214,7 @@
           } else {
             showPage(pages.there, function() {
               setHere(location, getBounds(results, 'locality'));
-              callback(true);
+              if (callback != undefined) callback(true);
             });
           }
         });
@@ -254,31 +249,28 @@
   }
 
   // credit: http://stackoverflow.com/a/11703018/962091
-  function bindAutoSelectOnEnterOrTab(inputs) {
-    for (var i = 0; i < inputs.length; i++) {
-      var input = inputs[i];
-      // store the original event binding function
-      var _addEventListener = (input.addEventListener) ?
-        input.addEventListener : input.attachEvent;
+  function bindAutoSelectOnEnterOrTab(input) {
+    // store the original event binding function
+    var _addEventListener = (input.addEventListener) ?
+      input.addEventListener : input.attachEvent;
 
-      function addEventListenerWrapper(type, listener) {
-        // Simulate a 'down arrow' keypress on hitting 'return' or 'tab'
-        // when no pac suggestion is selected, and then trigger the original listener.
-        if (type == 'keydown') {
-          var orig_listener = listener;
-          listener = function(event) {
-            var suggestion_selected = $('.pac-item.pac-selected').length > 0;
-            if ((event.which == 13 || event.which == 9) && !suggestion_selected) {
-              var simulated_downarrow = $.Event('keydown', { keyCode: 40, which: 40 });
-              orig_listener.apply(input, [simulated_downarrow]);
-            }
-            orig_listener.apply(input, [event]);
-          };
-        }
-        _addEventListener.apply(input, [type, listener]);
+    function addEventListenerWrapper(type, listener) {
+      // Simulate a 'down arrow' keypress on hitting 'return' or 'tab'
+      // when no pac suggestion is selected, and then trigger the original listener.
+      if (type == 'keydown') {
+        var orig_listener = listener;
+        listener = function(event) {
+          var suggestion_selected = $('.pac-item.pac-selected').length > 0;
+          if ((event.which == 13 || event.which == 9) && !suggestion_selected) {
+            var simulated_downarrow = $.Event('keydown', { keyCode: 40, which: 40 });
+            orig_listener.apply(input, [simulated_downarrow]);
+          }
+          orig_listener.apply(input, [event]);
+        };
       }
-      input.addEventListener = addEventListenerWrapper;
-      input.attachEvent = addEventListenerWrapper;
+      _addEventListener.apply(input, [type, listener]);
     }
+    input.addEventListener = addEventListenerWrapper;
+    input.attachEvent = addEventListenerWrapper;
   }
 })();
