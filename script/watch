@@ -1,0 +1,7 @@
+#!/bin/sh
+# Automatically recompile Stylus files when they change.
+# For development, use serve and go to http://localhost:3000/index.jade.
+# This allows you to just compile the html when we need to deploy, and
+# only have to compile Stylus files on the fly when developing.
+
+exec stylus -w css/*.styl --out css/
