@@ -15,9 +15,13 @@ a {
   border-top: thick solid #39c;
   min-height: 100%;
   text-align: center;
-  padding-top: 25px;
+}
+#main {
+  padding-bottom: 75px;
+  overflow: auto;
 }
 header {
+  padding-top: 25px;
   padding-bottom: 25px;
   overflow: hidden;
   width: 400px;
@@ -185,5 +189,25 @@ button:disabled {
   border-right: thin solid #06c;
   height: 400px;
   width: 880px;
-  margin: 0 auto;
+  margin: 0 auto 25px;
+}
+footer {
+  height: 75px;
+  border-top: thick solid #06c;
+  background: #000;
+  clear: both;
+  margin-top: -75px;
+  position: relative;
+  color: #fff;
+  text-align: center;
+}
+footer h6 {
+  font-weight: 300;
+  padding-top: 10px;
+}
+footer a:visited {
+  color: #fff;
+}
+footer a:hover {
+  color: #39c;
 }
