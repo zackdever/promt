@@ -22,7 +22,8 @@
         , zoom               : 16
         , zoomControl        : false
       }
-    , markerIcon = '/images/you-are-here.png';
+    , endIcon = '/images/trips-end.png'
+    , startIcon = '/images/trips-start.png';
 
   // kick things off
   $(function() {
@@ -109,7 +110,7 @@
     clearHereMarker();
     hereMarker = new google.maps.Marker({
         animation : google.maps.Animation.DROP
-      , icon      : '/images/you-are-here.png'
+      , icon      : startIcon
       , map       : map
       , position  : location
       , title     : 'You are here!'
@@ -182,12 +183,10 @@
         directionsDisplay.setDirections(result);
         directionsDisplay.setMap(map);
 
-        
-
         // place a marker on the destination
         thereMarker = new google.maps.Marker({
             animation : google.maps.Animation.DROP
-          , icon      : '/images/trips-end.png'
+          , icon      : endIcon
           , map       : map
           , position  : there.geometry.location
           , title     : "Your journey's conclusion"
