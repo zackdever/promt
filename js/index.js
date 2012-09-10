@@ -182,10 +182,12 @@
         directionsDisplay.setDirections(result);
         directionsDisplay.setMap(map);
 
+        
+
         // place a marker on the destination
         thereMarker = new google.maps.Marker({
             animation : google.maps.Animation.DROP
-          , icon      : markerIcon
+          , icon      : '/images/trips-end.png'
           , map       : map
           , position  : there.geometry.location
           , title     : "Your journey's conclusion"
