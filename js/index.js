@@ -162,7 +162,7 @@
 
   function getDirections() {
     var request = buildRequest(there)
-      , when = Time.parseToDate(document.getElementById('when').value);
+      , when = Time(document.getElementById('when').value).nextDate();
 
     directionsService.route(request, function(result, status) {
       // clear the old destination marker if it exists
