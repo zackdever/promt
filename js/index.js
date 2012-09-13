@@ -1,5 +1,23 @@
 (function() {
-  var $there, activePage, autoComplete, hereMarker, thereMarker, map, pages, there;
+  var $there, activePage, autoComplete, hereMarker, thereMarker, map, there;
+
+  // a page is defined by selectors which identify all of its unique elements.
+  // it may optionally define its own onLoad.
+  var pages = {
+      // manual location entry
+      manual : {
+          selector   : '#old-school, #phonehome'
+        , beforeLoad : showWorldMap
+        , afterLoad  : function() { $('#where').focus(); }
+    }
+      // searching for geo location
+    , searching : { selector : '#searching' }
+      // defining where 'there' is. the main page.
+    , there : {
+        selector : '#there-input'
+      , onLoad   : function() { $there.focus(); }
+    }
+  };
 
   // goog objects
   var center            = new google.maps.LatLng(20, -95)
@@ -30,28 +48,16 @@
     $there = $('#there');
 
     initDocument();
-    showManualHomeEntry();
+    showPage(pages.manual);
     if (navigator.geolocation) setGeoLocation();
   });
 
   function initDocument() {
-    var hereEl = document.getElementById('here');
-    // init "pages"
-    pages = {
-        manual    : {
-            selector : '#old-school, #phonehome'
-          , onLoad   : function() { $('#where').focus(); }
-        }
-      , searching : { selector : '#searching' }
-      , there     : {
-            selector : '#there-input'
-          , onLoad   : function() { $there.focus(); }
-        }
-    };
-
     // init manual location entry
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    var hereEl = document.getElementById('here');
     var hereAuto = new google.maps.places.Autocomplete(hereEl, {});
+    bindAutoSelectOnEnterOrTab(hereEl);
     google.maps.event.addListener(hereAuto, 'place_changed', function() {
       var geometry = hereAuto.getPlace().geometry;
       setHere(geometry.location, geometry.bounds);
@@ -67,12 +73,15 @@
     autoComplete = new google.maps.places.Autocomplete($there[0], {});
     autoComplete.bindTo('bounds', map);
     google.maps.event.addListener(autoComplete, 'place_changed', onAutoSelectionChanged);
-    bindAutoSelectOnEnterOrTab(hereEl);
     bindAutoSelectOnEnterOrTab($there[0]);
     $('.go').click(getDirections);
     $there.focusout(onThereLosesFocus);
   }
 
+  // Fade out all current page elements, then fade in all new elements.
+  //
+  // @page e.g. pages.there, pages.waiting
+  // @callback (optional) called after all new elements have faded in.
   function showPage(page, callback) {
     function show() {
       activePage = page;
@@ -89,13 +98,6 @@
     } else {
       show();
     }
-  }
-
-  function showManualHomeEntry() {
-    clearHereMarker();
-    map.setCenter(center);
-    map.setZoom(1);
-    showPage(pages.manual);
   }
 
   function clearHereMarker() {
@@ -135,7 +137,7 @@
     var duration = ''
       , result = 'From where <span class="location">you&apos;re sat</span> you&apos;ll ';
 
-    if (arrival != null) {
+    if (arrival != null && arrival != '') {
       var departure = moment(arrival).subtract('seconds', seconds).format('h:mm a');
       result += 'need to leave around <span class="bold">' + departure + '</span>';
     } else {
@@ -163,7 +165,9 @@
 
   function getDirections() {
     var request = buildRequest(there)
-      , when = Time(document.getElementById('when').value).nextDate();
+      , when = document.getElementById('when').value;
+
+    if (when !== undefined && when.replace(/\s/g, '').length > 0) when = Time(when).nextDate();
 
     directionsService.route(request, function(result, status) {
       // clear the old destination marker if it exists
@@ -211,6 +215,12 @@
       map.setCenter(hereMarker.position);
       map.setZoom(mapOptions.zoom);
     }
+  }
+
+  function showWorldMap() {
+    clearHereMarker();
+    map.setCenter(center);
+    map.setZoom(1);
   }
 
   function setGeoLocation() {
