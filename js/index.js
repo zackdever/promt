@@ -1,5 +1,6 @@
 (function() {
-  var $there, activePage, autoComplete, hereMarker, thereMarker, map, there;
+  var $there, activePage, autoComplete, hereMarker
+    , thereMarker, leaveBy, map, there;
 
   // a page is defined by selectors which identify all of its unique elements.
   // it may optionally define its own onLoad.
@@ -26,7 +27,7 @@
     , geocoder          = new google.maps.Geocoder();
 
   // configs
-  var geoOptions = {maximumAge: 10000}
+  var geoOptions = {maximumAge: 10000, timeout: 3000}
     , lowSat = [{featureType: 'all', stylers: [{saturation: -100 }]}]
     , mapOptions = {
           center             : center
@@ -41,7 +42,8 @@
         , zoomControl        : false
       }
     , endIcon = '/images/trips-end.png'
-    , startIcon = '/images/trips-start.png';
+    , startIcon = '/images/trips-start.png'
+    , notificationBuffer = 3 * 60 * 1000;
 
   // kick things off
   $(function() {
@@ -67,6 +69,13 @@
 
     $('#phonehome').click(function() {
       showPage(pages.there);
+    });
+
+    $('#notify').click(function() {
+      var millisToNotification = leaveBy.toDate() - new Date() + notificationBuffer;
+      setTimeout(function() {
+        alert('you should really leave in the next few minutes');
+      }, millisToNotification);
     });
 
     // init 'there' elements
@@ -138,7 +147,8 @@
       , result = 'From where <span class="location">you&apos;re sat</span> you&apos;ll ';
 
     if (arrival != null && arrival != '') {
-      var departure = moment(arrival).subtract('seconds', seconds).format('h:mm a');
+      leaveBy = moment(arrival).subtract('seconds', seconds);
+      var departure = leaveBy.format('h:mm a');
       result += 'need to leave around <span class="bold">' + departure + '</span>';
     } else {
       var arrival = moment().add('seconds', seconds).format('h:mm a');

@@ -171,6 +171,9 @@ button:disabled {
   font-size: 70%;
   color: #fff;
 }
+#info #result button {
+  height: 1em;
+}
 .smallprint {
   font-size: 10px;
   clear: both;
