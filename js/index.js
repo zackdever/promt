@@ -72,9 +72,9 @@
     });
 
     $('#notify').click(function() {
-      var millisToNotification = leaveBy.toDate() - new Date() + notificationBuffer;
+      var millisToNotification = leaveBy.toDate() - new Date() - notificationBuffer;
       setTimeout(function() {
-        alert('you should really leave in the next few minutes');
+        notify('you need to leave for ' + there.name + ' in the next few minutes');
       }, millisToNotification);
     });
 
@@ -85,6 +85,10 @@
     bindAutoSelectOnEnterOrTab($there[0]);
     $('.go').click(getDirections);
     $there.focusout(onThereLosesFocus);
+  }
+
+  function notify(message) {
+    alert(message);
   }
 
   // Fade out all current page elements, then fade in all new elements.
