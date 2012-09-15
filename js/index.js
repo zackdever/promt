@@ -96,7 +96,7 @@
         notification = notifications.createNotification(
           '/images/promt.png', title, message);
         notification.ondisplay = function() { console.log('displaying notification'); };
-        notification.onclose = function() { console.log('notification closed'); };
+        notification.onclose = function() { console.log('notification closed'); }; // broken
         notification.show();
       } else if (permission == 2) { // PERMISSION_DENIED
         console.log('notification permission denied');
@@ -179,11 +179,13 @@
       leaveBy = moment(arrival).subtract('seconds', seconds);
       var departure = leaveBy.format('h:mm a');
       result += 'need to leave around <span class="bold">' + departure + '</span>';
+      $('#notify').show();
     } else {
       var arrival = moment().add('seconds', seconds).format('h:mm a');
       var durationSeconds = moment.duration(seconds, 'seconds').humanize();
       duration = '(about ' + durationSeconds + ')';
       result += 'get there around <span class="bold">' + arrival + '</span>';
+      $('#notify').hide();
     }
 
     $('#duration').text(duration);
