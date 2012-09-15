@@ -74,7 +74,7 @@
     $('#notify').click(function() {
       var millisToNotification = leaveBy.toDate() - new Date() - notificationBuffer;
       setTimeout(function() {
-        notify('you need to leave for ' + there.name + ' in the next few minutes');
+        notify('Promt - ' + there.name, 'leave in the next few minutes!');
       }, millisToNotification);
     });
 
@@ -87,8 +87,33 @@
     $there.focusout(onThereLosesFocus);
   }
 
-  function notify(message) {
-    alert(message);
+  function notify(title, message) {
+    var notifications = webkitNotifications;
+
+    function showNotification() {
+      var permission = notifications.checkPermission();
+      if (permission == 0) { // PERMISSION_ALLOWED
+        notification = notifications.createNotification(
+          '/images/promt.png', title, message);
+        notification.ondisplay = function() { console.log('displaying notification'); };
+        notification.onclose = function() { console.log('notification closed'); };
+        notification.show();
+      } else if (permission == 2) { // PERMISSION_DENIED
+        console.log('notification permission denied');
+      } else {
+        notifications.requestPermission(function() {
+          showNotification();
+        });
+      }
+    }
+
+    // check for notifications support
+    if (notifications) {
+        showNotification();
+    } else {
+      console.log('Notifications are not supported for this Browser/OS version yet.');
+      alert(title + '\n' + message);
+    }
   }
 
   // Fade out all current page elements, then fade in all new elements.
