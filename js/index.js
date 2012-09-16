@@ -137,9 +137,12 @@
 
   // enable/disable go button based on valid input
   function validateGo() {
-    console.log('validating');
-    var enable = there != undefined && Time(document.querySelector('#when').value).isValid();
+    var when = $('#when')
+      , enable = there != undefined && Time(when.val()).isValid();
+
     document.querySelector('.go').disabled = !enable;
+    if (enable) when.removeClass('error');
+    else when.addClass('error');
   }
 
   function directionsSuccess(seconds, arrival) {
