@@ -69,6 +69,8 @@
       showPage(pages.there);
     });
 
+    $('#when').keyup(validateGo);
+
     // init 'there' elements
     autoComplete = new google.maps.places.Autocomplete($there[0], {});
     autoComplete.bindTo('bounds', map);
@@ -130,7 +132,14 @@
   function onAutoSelectionChanged() {
     there = autoComplete.getPlace();
     there.text = $there.val();
-    $('.go').prop('disabled', false);
+    validateGo();
+  }
+
+  // enable/disable go button based on valid input
+  function validateGo() {
+    console.log('validating');
+    var enable = there != undefined && Time(document.querySelector('#when').value).isValid();
+    document.querySelector('.go').disabled = !enable;
   }
 
   function directionsSuccess(seconds, arrival) {
