@@ -138,10 +138,11 @@
   // enable/disable go button based on valid input
   function validateGo() {
     var when = $('#when')
-      , enable = there != undefined && Time(when.val()).isValid();
+      , whenValid = Time(when.val()).isValid()
+      , enable = there != undefined && whenValid;
 
     document.querySelector('.go').disabled = !enable;
-    if (enable) when.removeClass('error');
+    if (whenValid) when.removeClass('error');
     else when.addClass('error');
   }
 
