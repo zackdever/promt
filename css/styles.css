@@ -208,6 +208,7 @@ footer h6 {
   font-weight: 300;
   padding-top: 10px;
 }
+footer a,
 footer a:visited {
   color: #fff;
 }
