@@ -77,9 +77,9 @@
     google.maps.event.addListener(autoComplete, 'place_changed', onAutoSelectionChanged);
     bindAutoSelectOnEnterOrTab($there[0]);
     $('.go').click(getDirections);
-    $('#there, #when').keydown(function(e){
-      if(e.which == 13)
-        $('.go').trigger('click');
+
+    $('#there, #when').keydown(function (e) {
+      if(e.which === 13) $('.go').trigger('click');
     });
 
     $there.focusout(onThereLosesFocus);
