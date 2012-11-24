@@ -7,8 +7,9 @@
       // manual location entry
       manual : {
           selector   : '#old-school, #phonehome'
-        , beforeLoad : showWorldMap
-        , afterLoad  : function() { $('#where').focus(); }
+        //, beforeLoad : showWorldMap
+        //, afterLoad  : function() { $('#where').focus(); }
+        , onLoad : function() { showWorldMap(); $('#where').focus(); }
     }
       // searching for geo location
     , searching : { selector : '#searching' }
