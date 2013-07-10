@@ -1,5 +1,4 @@
 #!/bin/sh
-# Compile Jade and Stylus files.
+# Compile Stylus files.
 
-stylus css/styles.styl --out css/
-exec jade index.jade
+exec stylus css/styles.styl --out css/

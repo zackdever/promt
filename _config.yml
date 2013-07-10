@@ -1,1 +1,1 @@
-exclude: [package.json, jade, script, README.md]
+exclude: [package.json, script, README.md]
