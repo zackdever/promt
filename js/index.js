@@ -54,6 +54,9 @@
   });
 
   function initDocument() {
+    // set the correct year
+    $('#year').text(new Date().getFullYear());
+
     // init manual location entry
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
     var hereEl = document.getElementById('here');
